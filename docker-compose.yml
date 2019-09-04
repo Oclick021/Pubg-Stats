@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  pubgstatsbot:
+    image: ${DOCKER_REGISTRY-}pubgstatsbot
+    build:
+      context: .
+      dockerfile: PubgStatsBot/Dockerfile

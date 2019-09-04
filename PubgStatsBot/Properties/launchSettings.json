@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "PubgStatsBot": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
