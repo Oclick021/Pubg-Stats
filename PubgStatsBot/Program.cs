@@ -15,11 +15,6 @@ namespace PubgStatsBot
         // an asynchronous context from the beginning.
         static void Main(string[] args)
         {
-            if (args == null)
-            {
-                throw new ArgumentNullException(nameof(args));
-            }
-
             new Program()
                 .MainAsync()
                 .GetAwaiter()
@@ -97,7 +92,10 @@ namespace PubgStatsBot
                 {
                     await messageHelper.GetStatsCompare(message);
                 }
-
+                if (message.Content.ToLower().StartsWith("!recents"))
+                {
+                    await messageHelper.GetMatchStats(message);
+                }
             }
         }
 

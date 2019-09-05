@@ -15,7 +15,7 @@ namespace PubgStatsBot.Helpers
     {
         readonly DiscordSocketClient _client;
         readonly SocketMessage _message;
-         public MessageHelper(DiscordSocketClient client, SocketMessage message)
+        public MessageHelper(DiscordSocketClient client, SocketMessage message)
         {
             _client = client;
             _message = message;
@@ -67,7 +67,7 @@ namespace PubgStatsBot.Helpers
                 await message.Channel.SendMessageAsync("خطا: اسم 2 بازیکن را وارد کنید!");
             }
 
-            var players =await PubgHelper.GetPlayersByName(playersName);
+            var players = await PubgHelper.GetPlayersByName(playersName);
 
             if (players.Count() == 0)
             {
@@ -77,7 +77,7 @@ namespace PubgStatsBot.Helpers
             {
                 foreach (var player in players)
                 {
-                   await player.GetPlayerStats();
+                    await player.GetPlayerStats();
                 }
                 await message.Channel.SendMessageAsync(embed: EmbedHelper.GetCompare($"Compare", players, Color.Red));
             }
@@ -90,11 +90,7 @@ namespace PubgStatsBot.Helpers
             if (player != null)
             {
                 await player.GetMatches();
-
-                await message.Channel.SendMessageAsync(embed: EmbedHelper.GetStats($"{player.Name}'s Solo FPP", player.SoloStats, Color.Red));
-                await message.Channel.SendMessageAsync(embed: EmbedHelper.GetStats($"{player.Name}'s Duo FPP", player.DuoStats, Color.Blue));
-                await message.Channel.SendMessageAsync(embed: EmbedHelper.GetStats($"{player.Name}'s Squad FPP", player.SquadStats, Color.Teal));
-
+                await message.Channel.SendMessageAsync(embed: EmbedHelper.GetMatches($"{player.Name}'s Solo FPP", player, Color.Red));
             }
         }
 

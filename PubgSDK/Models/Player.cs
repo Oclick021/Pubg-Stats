@@ -33,32 +33,40 @@ namespace PubgSDK.Models
 
         public async Task GetMatches(PubgPlayer player = null)
         {
-            if (LastMatchUpdate < DateTime.Now.AddMinutes(-10))
+            if (LastMatchUpdate == null || LastMatchUpdate < DateTime.Now.AddMinutes(-10))
             {
                 if (player == null)
                 {
                     player = await PubgHelper.GetPubgPlayer(Id);
                 }
                 var list = new List<PlayerMatch>();
-                using (var con = PubgDB.Instance)
-                {
-                    foreach (var matchId in player.MatchIds)
-                    {
 
-                        var matchFound = con.Matches.Find(matchId);
-                        if (matchFound == null)
-                        {
-                            matchFound = await PubgHelper.GetPubgMatch(matchId);
-                        }
-                        else
-                        {
-                            con.Matches.Attach(matchFound);
-                        }
-                        list.Add(new PlayerMatch() { Player = this, Match = matchFound });
+                foreach (var matchId in player.MatchIds.Take(20))
+                {
+
+                    var matchFound = await PubgDB.Instance.Matches.Where(m => m.Id == matchId).FirstOrDefaultAsync();
+                    if (matchFound == null)
+                    {
+                        matchFound = await PubgHelper.GetPubgMatch(matchId);
                     }
-                    Matches.Concat(list);
-                    await con.SaveChangesAsync();
+                    else
+                    {
+                        PubgDB.Instance.Matches.Attach(matchFound);
+                    }
+                    list.Add(new PlayerMatch() { Player = this, Match = matchFound });
                 }
+
+                if (Matches == null || Matches.Count() == 0)
+                {
+                    Matches = list;
+                }
+                else
+                {
+                    Matches.Concat(list);
+                }
+
+                LastMatchUpdate = DateTime.Now;
+                await SaveAsync();
             }
 
         }
@@ -74,30 +82,34 @@ namespace PubgSDK.Models
                 SquadStats = new SeasonStats();
                 SquadStats.Clone(playerSeason.GameModeStats.SquadFPP);
                 CurrentSeasionLastUpdate = DateTime.Now;
+                await SaveAsync();
             }
         }
 
 
-        public async Task Save()
+        public async Task SaveAsync()
         {
-            using (var con = PubgDB.Instance)
+
+
+            var player = await PubgDB.Instance.Players.FindAsync(Id);
+            if (player == null)
             {
-                var player = await con.Players.FindAsync(Id);
-                if (player == null)
-                {
-                    con.Players.Add(this);
-                    await con.SaveChangesAsync();
-                }
-                else
-                {
-                    player.SoloStats = SoloStats;
-                    player.DuoStats = DuoStats;
-                    player.SquadStats = SquadStats;
-                    player.CurrentSeasionLastUpdate = CurrentSeasionLastUpdate;
-                    con.Players.Update(player);
-                    await con.SaveChangesAsync();
-                }
+                await PubgDB.Instance.Players.AddAsync(this);
+                await PubgDB.Instance.SaveChangesAsync();
             }
+            else
+            {
+                //player.SoloStats = SoloStats;
+                //player.DuoStats = DuoStats;
+                //player.SquadStats = SquadStats;
+                //player.Matches = Matches;
+                //player.LastMatchUpdate = LastMatchUpdate;
+                //player.CurrentSeasionLastUpdate = CurrentSeasionLastUpdate;
+                PubgDB.Instance.Players.Update(this);
+                await PubgDB.Instance.SaveChangesAsync();
+            }
+
+
         }
 
         public IEnumerable<Roster> GetLatestRosters()

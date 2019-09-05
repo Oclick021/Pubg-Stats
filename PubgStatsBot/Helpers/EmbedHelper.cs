@@ -3,17 +3,18 @@ using Pubg.Net;
 using PubgSDK.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace PubgStatsBot.Helpers
 {
     public static class EmbedHelper
     {
-        public static Embed GetStats(string StatsType, SeasonStats stats,Color color)
+        public static Embed GetStats(string statsType, SeasonStats stats, Color color)
         {
             var embedBuilder = new EmbedBuilder
             {
-                Title = StatsType,
+                Title = statsType,
                 Color = color,
                 Url = "https://discord.gg/3FsMG3"
             };
@@ -24,6 +25,32 @@ namespace PubgStatsBot.Helpers
             embedBuilder.WithFooter(new EmbedFooterBuilder() { Text = "با تشکر", IconUrl = "http://icons.iconarchive.com/icons/graphicloads/100-flat/256/home-icon.png" });
             return embedBuilder.Build();
         }
+        public static Embed GetMatches(string statsType, Player player, Color color)
+        {
+            var embedBuilder = new EmbedBuilder
+            {
+                Title = statsType,
+                Color = color,
+                Url = "https://discord.gg/3FsMG3"
+            };
+
+            var matchList = player.Matches.Select(x => x.Match).OrderByDescending(o => o.CreatedAt).Take(6).ToArray();
+            for (int i = 0; i < matchList.Length; i += 2)
+            {
+                embedBuilder.AddField(new EmbedFieldBuilder() { Name = "Title", Value = Match.GetTitles(), IsInline = true });
+                embedBuilder.AddField(new EmbedFieldBuilder() { Name = $"{matchList[i].GameMode} | {matchList[i].MapName} | {matchList[i].GetParticipantsMatchStats(player.Name).WinPlace} ", Value = matchList[i].GetParticipantsMatchStats(player.Name), IsInline = true });
+                if (i + 1 <= matchList.Length)
+                {
+                    embedBuilder.AddField(new EmbedFieldBuilder() { Name = $"{matchList[i + 1].GameMode} | {matchList[i + 1].MapName} | {matchList[i + 1].GetParticipantsMatchStats(player.Name).WinPlace} ", Value = matchList[i + 1].GetParticipantsMatchStats(player.Name), IsInline = true });
+                }
+
+            }
+
+
+            embedBuilder.WithFooter(new EmbedFooterBuilder() { Text = "با تشکر", IconUrl = "http://icons.iconarchive.com/icons/graphicloads/100-flat/256/home-icon.png" });
+            return embedBuilder.Build();
+        }
+
         public static Embed GetCompare(string StatsType, IEnumerable<Player> players, Color color)
         {
             var embedBuilder = new EmbedBuilder
@@ -80,5 +107,7 @@ namespace PubgStatsBot.Helpers
             embedBuilder.WithFooter(new EmbedFooterBuilder() { Text = "با تشکر", IconUrl = "http://icons.iconarchive.com/icons/graphicloads/100-flat/256/home-icon.png" });
             return embedBuilder.Build();
         }
+
+
     }
 }

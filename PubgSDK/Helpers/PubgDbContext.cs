@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using PubgSDK.Extentions;
 
 namespace PubgSDK.Helpers
 {
@@ -48,7 +49,7 @@ namespace PubgSDK.Helpers
         {
             get
             {
-                if (instance == null)
+                if (instance == null )
                 {
                     instance = new PubgDB();
                 }
@@ -56,6 +57,9 @@ namespace PubgSDK.Helpers
             }
             set => instance = value;
         }
+
+       
+
 
     }
 }

@@ -28,7 +28,14 @@ namespace PubgSDK.Helpers
                 {
                     playerFound = new Player() { Name = name, Id = onlinePlayer.Id };
                     await playerFound.GetPlayerStats();
+                    await playerFound.GetMatches(onlinePlayer);
+
                 }
+            }
+            else
+            {
+                await playerFound.GetPlayerStats();
+                await playerFound.GetMatches();
             }
             return playerFound;
         }
@@ -48,10 +55,11 @@ namespace PubgSDK.Helpers
         /// 
         public static async Task<PubgPlayer> GetPubgPlayer(string id = null, string name = null)
         {
+            PubgPlayer player = null;
             var playerService = new PubgPlayerService();
             if (id != null)
             {
-                return await playerService.GetPlayerAsync(PubgPlatform.Steam, id, Credentials.PubgToken);
+                player = await playerService.GetPlayerAsync(PubgPlatform.Steam, id, Credentials.PubgToken);
             }
             else if (name != null)
             {
@@ -60,9 +68,9 @@ namespace PubgSDK.Helpers
                     ApiKey = Credentials.PubgToken,
                     PlayerNames = new string[] { name }
                 });
-                return result.FirstOrDefault();
+                player = result.FirstOrDefault();
             }
-            return null;
+            return player;
         }
 
 
