@@ -13,7 +13,7 @@ namespace PubgSDK.Helpers
             {
                 if (pubgToken == null)
                 {
-                    pubgToken = Environment.GetEnvironmentVariable("pubgtoken", EnvironmentVariableTarget.User);
+                    pubgToken = Environment.GetEnvironmentVariable("pubgtoken");
                 }
                 return pubgToken;
             }

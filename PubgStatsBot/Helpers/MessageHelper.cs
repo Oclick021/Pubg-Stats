@@ -27,8 +27,8 @@ namespace PubgStatsBot.Helpers
             {
                 if (!_client.GetChannel(Credentials.ServerID).ChannelHasUser(_message.Author))
                 {
-                    await _message.Channel.SendMessageAsync("Only members of Pubg stats can use this bot. please consider joining our server first");
-                    Console.WriteLine($"{_message.Author.Username} is Not a member");
+                    await _message.Channel.SendMessageAsync(Strings.OnlyMembersCanUse);
+                    Console.WriteLine($"{_message.Author.Username} {Strings.NotAMember}");
                     return false;
 
                 }
@@ -39,7 +39,7 @@ namespace PubgStatsBot.Helpers
                 {
 
                     await _message.Channel.SendMessageAsync("https://discord.gg/3FsMG3", embed: new EmbedBuilder() { Description = "این بات موقتا فقط برای استفاده در PubgStat میباشد لطفا ابتدا عوض گروه شوید", Color = Color.Gold }.Build());
-                    Console.WriteLine($"{_message.Author.Username} is Not a member");
+                    Console.WriteLine($"{_message.Author.Username} {Strings.NotAMember}");
                     return false;
                 }
             }
@@ -100,14 +100,14 @@ namespace PubgStatsBot.Helpers
             string playerName = message.Content.Replace("!" + cmd, "").Trim();
             if (playerName.Contains(" "))
             {
-                await message.Channel.SendMessageAsync("!خطا : اسم حاویه فاصله است");
+                await message.Channel.SendMessageAsync();
                 return null;
             }
 
             var player = await PubgHelper.GetPlayerByName(playerName);
-            if (player.Id == null)
+            if (player == null)
             {
-                await message.Channel.SendMessageAsync("بازیکنی با این نام یافت نشد");
+                await message.Channel.SendMessageAsync(Strings.PlayerNotFound);
                 return null;
             }
             return player;

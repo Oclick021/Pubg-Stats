@@ -56,21 +56,31 @@ namespace PubgSDK.Helpers
         public static async Task<PubgPlayer> GetPubgPlayer(string id = null, string name = null)
         {
             PubgPlayer player = null;
-            var playerService = new PubgPlayerService();
-            if (id != null)
+            try
             {
-                player = await playerService.GetPlayerAsync(PubgPlatform.Steam, id, Credentials.PubgToken);
-            }
-            else if (name != null)
-            {
-                var result = await playerService.GetPlayersAsync(PubgPlatform.Steam, new GetPubgPlayersRequest
+
+
+                var playerService = new PubgPlayerService();
+                if (id != null)
                 {
-                    ApiKey = Credentials.PubgToken,
-                    PlayerNames = new string[] { name }
-                });
-                player = result.FirstOrDefault();
+                    player = await playerService.GetPlayerAsync(PubgPlatform.Steam, id, Credentials.PubgToken);
+                }
+                else if (name != null)
+                {
+                    var result = await playerService.GetPlayersAsync(PubgPlatform.Steam, new GetPubgPlayersRequest
+                    {
+                        ApiKey = Credentials.PubgToken,
+                        PlayerNames = new string[] { name }
+                    });
+                    player = result.FirstOrDefault();
+                }
+            }
+            catch (Exception)
+            {
+
             }
             return player;
+
         }
 
 

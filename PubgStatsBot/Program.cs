@@ -26,15 +26,34 @@ namespace PubgStatsBot
         public Program()
         {
 
-            // It is recommended to Dispose of a client when you are finished
-            // using it, at the end of your app's lifetime.
-            _client = new DiscordSocketClient();
+            Console.WriteLine(Credentials.DiscordToken);
 
-            _client.Log += LogAsync;
-            _client.Ready += ReadyAsync;
-            _client.MessageReceived += MessageReceivedAsync;
+            if (Credentials.DiscordToken != null && PubgSDK.Helpers.Credentials.PubgToken != null)
+            {
+                // It is recommended to Dispose of a client when you are finished
+                // using it, at the end of your app's lifetime.
+                _client = new DiscordSocketClient();
+
+                _client.Log += LogAsync;
+                _client.Ready += ReadyAsync;
+                _client.MessageReceived += MessageReceivedAsync;
+
+                var channel = _client.GetGroupChannelAsync(Credentials.ServerID);
+                var se = _client.GetChannel(Credentials.ServerID);
+            }
+            else
+            {
+                Console.WriteLine("Credentials values are not set");
+                Console.WriteLine($"pubg token lenght:{ PubgSDK.Helpers.Credentials.PubgToken?.Length.ToString() }");
+                Console.WriteLine($"Discord token lenght:{ Credentials.DiscordToken?.Length.ToString() }");
+
+            }
+
+
+
         }
 
+     
 
         public async Task MainAsync()
         {
@@ -56,7 +75,7 @@ namespace PubgStatsBot
         // connection and it is now safe to access the cache.
         private Task ReadyAsync()
         {
-            Console.WriteLine($"{_client.CurrentUser} is connected!");
+            Console.WriteLine($"{_client.CurrentUser} ");
 
             return Task.CompletedTask;
         }
@@ -73,10 +92,20 @@ namespace PubgStatsBot
             // The bot should never respond to itself.
             if (message.Author.Id == _client.CurrentUser.Id)
                 return;
-            Console.WriteLine($"{message.Author.Username} Requested!");
+            Console.WriteLine($"{message.Author.Username} {Strings.Requested}");
+
+
 
             if (await messageHelper.IsAuthorized())
             {
+
+                if (message.Content.ToLower().StartsWith("!test"))
+                {
+                  await  Watcher.StartWatch(message);
+
+                    await messageHelper.GetStats(message);
+                }
+
                 if (message.Content.EqualsAnyOf("!help", "!Help", "!HELP"))
                 {
                     await message.Channel.SendMessageAsync(embed: EmbedHelper.GetHelp());

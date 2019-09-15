@@ -41,7 +41,7 @@ namespace PubgSDK.Models
                 }
                 var list = new List<PlayerMatch>();
 
-                foreach (var matchId in player.MatchIds.Take(20))
+                foreach (var matchId in player.MatchIds.Take(10))
                 {
 
                     var matchFound = await PubgDB.Instance.Matches.Where(m => m.Id == matchId).FirstOrDefaultAsync();

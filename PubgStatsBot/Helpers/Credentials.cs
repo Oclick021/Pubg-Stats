@@ -13,7 +13,7 @@ namespace PubgStatsBot.Helpers
             {
                 if (discordToken == null)
                 {
-                    discordToken = Environment.GetEnvironmentVariable("discordtoken", EnvironmentVariableTarget.User);
+                    discordToken = Environment.GetEnvironmentVariable("discordtoken");
                 }
                 return discordToken;
             }
