@@ -13,7 +13,6 @@ namespace PubgStatsBot.Helpers
             {
                 while (true)
                 {
-                    await message.Channel.SendMessageAsync(message.Author.Username);
                     await Task.Delay(3000);
                 }
             });

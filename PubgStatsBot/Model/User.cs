@@ -6,8 +6,9 @@ namespace PubgStatsBot.Model
 {
     public class User
     {
-        public ulong ID { get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }
-        public ICollection<Player> PlayerList { get; set; }
+        public ulong DiscordId { get; set; }
+
     }
 }

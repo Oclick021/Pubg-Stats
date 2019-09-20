@@ -4,8 +4,10 @@ using System.Text;
 
 namespace PubgStatsBot.Model
 {
-    public class Player
+  public  class Player
     {
+        public int ID { get; set; }
         public string PubgID { get; set; }
+
     }
 }

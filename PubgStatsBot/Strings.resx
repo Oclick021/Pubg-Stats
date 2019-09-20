@@ -120,6 +120,9 @@
   <data name="Compare" xml:space="preserve">
     <value>Compare two players stats</value>
   </data>
+  <data name="DuoStats" xml:space="preserve">
+    <value>Get Players Duo Stats</value>
+  </data>
   <data name="Help" xml:space="preserve">
     <value>Help</value>
   </data>
@@ -132,8 +135,17 @@
   <data name="NotAMember" xml:space="preserve">
     <value>is Not a member</value>
   </data>
+  <data name="NoWatchFound" xml:space="preserve">
+    <value>You dont have a Watch yet. use the command !addWatch to add a player to your watch. for more information please use !help</value>
+  </data>
   <data name="OnlyMembersCanUse" xml:space="preserve">
     <value>Only members of Pubg stats can use this bot. please consider joining our server first</value>
+  </data>
+  <data name="PlayerAddedToWatch" xml:space="preserve">
+    <value>Player is successfully added to your watch. from now on whenever you play the a match you will recieve the match result. this function only works when you are online in discord. </value>
+  </data>
+  <data name="PlayerIsAlreadySaved" xml:space="preserve">
+    <value>بازیکن قبلا برای شما ثبت شده است</value>
   </data>
   <data name="PlayerNameHasSpace" xml:space="preserve">
     <value>Player name contains Space</value>
@@ -153,6 +165,12 @@
   <data name="Requested" xml:space="preserve">
     <value>Requested!</value>
   </data>
+  <data name="SoloStats" xml:space="preserve">
+    <value>Get players Solo Stats</value>
+  </data>
+  <data name="SquadStats" xml:space="preserve">
+    <value>Get Players Squads Stats</value>
+  </data>
   <data name="Thanks" xml:space="preserve">
     <value>Thank you!</value>
   </data>
@@ -161,5 +179,8 @@
   </data>
   <data name="Watch" xml:space="preserve">
     <value>Notify me when my team gets a chicken dinner</value>
+  </data>
+  <data name="YourPlayers" xml:space="preserve">
+    <value>Your players: </value>
   </data>
 </root>

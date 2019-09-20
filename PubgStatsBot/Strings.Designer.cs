@@ -70,6 +70,15 @@ namespace PubgStatsBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Get Players Duo Stats.
+        /// </summary>
+        internal static string DuoStats {
+            get {
+                return ResourceManager.GetString("DuoStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Help.
         /// </summary>
         internal static string Help {
@@ -106,11 +115,38 @@ namespace PubgStatsBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You dont have a Watch yet. use the command !addWatch to add a player to your watch. for more information please use !help.
+        /// </summary>
+        internal static string NoWatchFound {
+            get {
+                return ResourceManager.GetString("NoWatchFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only members of Pubg stats can use this bot. please consider joining our server first.
         /// </summary>
         internal static string OnlyMembersCanUse {
             get {
                 return ResourceManager.GetString("OnlyMembersCanUse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Player is successfully added to your watch. from now on whenever you play the a match you will recieve the match result. this function only works when you are online in discord. .
+        /// </summary>
+        internal static string PlayerAddedToWatch {
+            get {
+                return ResourceManager.GetString("PlayerAddedToWatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to بازیکن قبلا برای شما ثبت شده است.
+        /// </summary>
+        internal static string PlayerIsAlreadySaved {
+            get {
+                return ResourceManager.GetString("PlayerIsAlreadySaved", resourceCulture);
             }
         }
         
@@ -169,6 +205,24 @@ namespace PubgStatsBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Get players Solo Stats.
+        /// </summary>
+        internal static string SoloStats {
+            get {
+                return ResourceManager.GetString("SoloStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get Players Squads Stats.
+        /// </summary>
+        internal static string SquadStats {
+            get {
+                return ResourceManager.GetString("SquadStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Thank you!.
         /// </summary>
         internal static string Thanks {
@@ -192,6 +246,15 @@ namespace PubgStatsBot {
         internal static string Watch {
             get {
                 return ResourceManager.GetString("Watch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your players: .
+        /// </summary>
+        internal static string YourPlayers {
+            get {
+                return ResourceManager.GetString("YourPlayers", resourceCulture);
             }
         }
     }

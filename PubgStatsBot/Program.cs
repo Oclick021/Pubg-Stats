@@ -3,6 +3,8 @@ using Discord.WebSocket;
 using PubgSDK.Extentions;
 using PubgStatsBot.Helpers;
 using System;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace PubgStatsBot
@@ -49,7 +51,7 @@ namespace PubgStatsBot
                 }
             }
 
-           
+
 
 
 
@@ -63,9 +65,15 @@ namespace PubgStatsBot
             await _client.LoginAsync(TokenType.Bot, Credentials.DiscordToken);
             await _client.StartAsync();
 
+
+            var us = await _client.Rest.GetUserAsync(262663327547785216);
+            await Discord.UserExtensions.SendMessageAsync(us, "bot is online");
+
             // Block the program until it is closed.
             await Task.Delay(-1);
         }
+
+
 
         private Task LogAsync(LogMessage log)
         {
@@ -86,6 +94,8 @@ namespace PubgStatsBot
         // reading over the Commands Framework sample.
         private async Task MessageReceivedAsync(SocketMessage message)
         {
+          
+
             if (message.Content.ToLower().StartsWith("!ping"))
             {
                 await message.Channel.SendMessageAsync("pong!");
@@ -100,6 +110,11 @@ namespace PubgStatsBot
 
             if (await messageHelper.IsAuthorized())
             {
+
+                if (message.Content.StartsWith("AllUsersStatus") && message.Author.Id == Credentials.UserID)
+                {
+                  await  messageHelper.GetOnlineUsers();
+                }
 
                 if (message.Content.ToLower().StartsWith("!test"))
                 {
@@ -118,6 +133,18 @@ namespace PubgStatsBot
                 {
                     await messageHelper.GetStats(message);
                 }
+                if (message.Content.ToLower().StartsWith("!solo"))
+                {
+                    await messageHelper.GetStats(message);
+                }
+                if (message.Content.ToLower().StartsWith("!duo"))
+                {
+                    await messageHelper.GetStats(message);
+                }
+                if (message.Content.ToLower().StartsWith("!squad"))
+                {
+                    await messageHelper.GetStats(message);
+                }
 
                 if (message.Content.ToLower().StartsWith("!compare"))
                 {
@@ -127,6 +154,22 @@ namespace PubgStatsBot
                 {
                     await messageHelper.GetMatchStats(message);
                 }
+                if (message.Content.ToLower().StartsWith("!invite"))
+                {
+                    await message.Channel.SendMessageAsync(@"https://discordapp.com/api/oauth2/authorize?client_id=605829109335064593&permissions=0&scope=bot");
+
+                }
+                if (message.Content.ToLower().StartsWith("!addwatch"))
+                {
+                    await messageHelper.AddPlayerToWatch(message);
+
+                }
+                if (message.Content.ToLower().StartsWith("!mywatch"))
+                {
+                    await messageHelper.MyWatch(message);
+
+                }
+
             }
         }
 
