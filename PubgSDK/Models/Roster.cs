@@ -9,7 +9,6 @@ namespace PubgSDK.Models
     {
         public string Id { get; set; }
         public bool Won { get; set; }
-        public virtual ICollection<Participant> Participants { get; set; }
-        public string ShardId { get; set; }
+        public virtual IEnumerable<Participant> Participants { get; set; }
     }
 }

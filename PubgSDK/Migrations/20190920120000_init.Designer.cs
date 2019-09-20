@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PubgSDK.Helpers;
@@ -10,16 +9,14 @@ using PubgSDK.Helpers;
 namespace PubgSDK.Migrations
 {
     [DbContext(typeof(PubgDB))]
-    [Migration("20190903222304_ini")]
-    partial class ini
+    [Migration("20190920120000_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
 
             modelBuilder.Entity("PubgSDK.Models.Match", b =>
                 {
@@ -48,19 +45,15 @@ namespace PubgSDK.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Actor");
-
                     b.Property<string>("RosterId");
 
-                    b.Property<string>("ShardId");
-
-                    b.Property<long?>("StatsId");
+                    b.Property<long>("StatsID");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RosterId");
 
-                    b.HasIndex("StatsId");
+                    b.HasIndex("StatsID");
 
                     b.ToTable("Participants");
                 });
@@ -68,8 +61,7 @@ namespace PubgSDK.Migrations
             modelBuilder.Entity("PubgSDK.Models.ParticipantsStats", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("Assists");
 
@@ -180,8 +172,6 @@ namespace PubgSDK.Migrations
 
                     b.Property<string>("MatchId");
 
-                    b.Property<string>("ShardId");
-
                     b.Property<bool>("Won");
 
                     b.HasKey("Id");
@@ -241,7 +231,8 @@ namespace PubgSDK.Migrations
 
                     b.HasOne("PubgSDK.Models.ParticipantsStats", "Stats")
                         .WithMany()
-                        .HasForeignKey("StatsId");
+                        .HasForeignKey("StatsID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PubgSDK.Models.Player", b =>

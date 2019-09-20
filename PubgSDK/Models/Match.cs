@@ -14,13 +14,13 @@ namespace PubgSDK.Models
 
         public DateTime CreatedAt { get; set; }
         public int Duration { get; set; }
-        public virtual ICollection<Roster> Rosters { get; set; }
+        public virtual IEnumerable<Roster> Rosters { get; set; }
         public string GameMode { get; set; }
         public string MapName { get; set; }
         public bool IsCustomMatch { get; set; }
         public string SeasonState { get; set; }
 
-        public virtual ICollection<PlayerMatch> Players { get; set; }
+        public virtual IEnumerable<PlayerMatch> Players { get; set; }
         public Match()
         {
 

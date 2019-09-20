@@ -1,10 +1,9 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PubgSDK.Migrations
 {
-    public partial class ini : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,7 +29,7 @@ namespace PubgSDK.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: true),
                     PlayerId = table.Column<string>(nullable: true),
                     DBNOs = table.Column<int>(nullable: false),
@@ -98,7 +97,6 @@ namespace PubgSDK.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     Won = table.Column<bool>(nullable: false),
-                    ShardId = table.Column<string>(nullable: true),
                     MatchId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -152,9 +150,7 @@ namespace PubgSDK.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    StatsId = table.Column<long>(nullable: true),
-                    Actor = table.Column<string>(nullable: true),
-                    ShardId = table.Column<string>(nullable: true),
+                    StatsID = table.Column<long>(nullable: false),
                     RosterId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -167,11 +163,11 @@ namespace PubgSDK.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Participants_ParticipantsStats_StatsId",
-                        column: x => x.StatsId,
+                        name: "FK_Participants_ParticipantsStats_StatsID",
+                        column: x => x.StatsID,
                         principalTable: "ParticipantsStats",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -204,9 +200,9 @@ namespace PubgSDK.Migrations
                 column: "RosterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Participants_StatsId",
+                name: "IX_Participants_StatsID",
                 table: "Participants",
-                column: "StatsId");
+                column: "StatsID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PlayerMatch_MatchId",

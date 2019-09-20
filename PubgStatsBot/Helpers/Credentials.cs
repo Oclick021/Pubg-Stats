@@ -6,19 +6,7 @@ namespace PubgStatsBot.Helpers
 {
     public class Credentials
     {
-        private static string discordToken;
-       public static string DiscordToken
-        {
-            get
-            {
-                if (discordToken == null)
-                {
-                    discordToken = Environment.GetEnvironmentVariable("discordtoken");
-                }
-                return discordToken;
-            }
-            set => discordToken = value;
-        }
+        public static string DiscordToken { get; set; }
 
         public static ulong UserID = 0;
         public static ulong ChannelID = 614400058364002314;

@@ -25,7 +25,7 @@ namespace PubgSDK.Helpers
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseLazyLoadingProxies()
-                .UseSqlServer(@"Server=.\;Database=pubg;Trusted_Connection=True;MultipleActiveResultSets=true")
+                .UseSqlite("Data Source=pubg.db")
                 .EnableSensitiveDataLogging(true)
                 .EnableDetailedErrors(true);
             ;

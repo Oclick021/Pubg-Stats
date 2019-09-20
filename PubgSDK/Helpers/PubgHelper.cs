@@ -75,7 +75,7 @@ namespace PubgSDK.Helpers
                     player = result.FirstOrDefault();
                 }
             }
-            catch (Exception)
+            catch (Exception ss)
             {
 
             }

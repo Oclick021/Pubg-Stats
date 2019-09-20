@@ -15,9 +15,14 @@ namespace PubgSDK.Models
         public string Id { get; set; }
         public string Name { get; set; }
         public virtual SeasonStats SoloStats { get; set; }
+        public string SoloStatsID { get; set; }
         public virtual SeasonStats DuoStats { get; set; }
+        public string DuoStatsID { get; set; }
+
         public virtual SeasonStats SquadStats { get; set; }
-        public virtual ICollection<PlayerMatch> Matches { get; set; }
+        public string SquadStatsID { get; set; }
+
+        public virtual IEnumerable<PlayerMatch> Matches { get; set; }
         public DateTime? CurrentSeasionLastUpdate { get; set; }
         public DateTime? LastMatchUpdate { get; set; }
 

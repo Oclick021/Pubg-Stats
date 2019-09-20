@@ -1,11 +1,14 @@
-﻿using Pubg.Net;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
+using Pubg.Net;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace PubgSDK.Helpers
 {
-    class Configure
+    public class Configure
     {
         public Configure()
         {
@@ -13,6 +16,15 @@ namespace PubgSDK.Helpers
             {
                 opt.ApiKey = Credentials.PubgToken;
             });
+
+            var dbContext = new PubgDB();
+
+            if (!dbContext.Database.GetService<IRelationalDatabaseCreator>().Exists())
+            {
+
+                // Create the Db if it doesn't exist and applies any pending migration.
+                dbContext.Database.Migrate();
+            }
         }
     }
 }

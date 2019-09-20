@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PubgStatsBot
 {
-  public  class Program
+    public class Program
     {
         private readonly DiscordSocketClient _client;
 
@@ -25,35 +25,37 @@ namespace PubgStatsBot
 
         public Program()
         {
-
-            Console.WriteLine(Credentials.DiscordToken);
-
-            if (Credentials.DiscordToken != null && PubgSDK.Helpers.Credentials.PubgToken != null)
+            if (Config.Validate())
             {
-                // It is recommended to Dispose of a client when you are finished
-                // using it, at the end of your app's lifetime.
-                _client = new DiscordSocketClient();
+                if (Credentials.DiscordToken != null && PubgSDK.Helpers.Credentials.PubgToken != null)
+                {
+                    // It is recommended to Dispose of a client when you are finished
+                    // using it, at the end of your app's lifetime.
+                    _client = new DiscordSocketClient();
 
-                _client.Log += LogAsync;
-                _client.Ready += ReadyAsync;
-                _client.MessageReceived += MessageReceivedAsync;
+                    _client.Log += LogAsync;
+                    _client.Ready += ReadyAsync;
+                    _client.MessageReceived += MessageReceivedAsync;
 
-                var channel = _client.GetGroupChannelAsync(Credentials.ServerID);
-                var se = _client.GetChannel(Credentials.ServerID);
+                    var channel = _client.GetGroupChannelAsync(Credentials.ServerID);
+                    var se = _client.GetChannel(Credentials.ServerID);
+                }
+                else
+                {
+                    Console.WriteLine("Credentials values are not set");
+                    Console.WriteLine($"pubg token lenght:{ PubgSDK.Helpers.Credentials.PubgToken?.Length.ToString() }");
+                    Console.WriteLine($"Discord token lenght:{ Credentials.DiscordToken?.Length.ToString() }");
+
+                }
             }
-            else
-            {
-                Console.WriteLine("Credentials values are not set");
-                Console.WriteLine($"pubg token lenght:{ PubgSDK.Helpers.Credentials.PubgToken?.Length.ToString() }");
-                Console.WriteLine($"Discord token lenght:{ Credentials.DiscordToken?.Length.ToString() }");
 
-            }
+           
 
 
 
         }
 
-     
+
 
         public async Task MainAsync()
         {
@@ -101,7 +103,7 @@ namespace PubgStatsBot
 
                 if (message.Content.ToLower().StartsWith("!test"))
                 {
-                  await  Watcher.StartWatch(message);
+                    await Watcher.StartWatch(message);
 
                     await messageHelper.GetStats(message);
                 }
