@@ -95,29 +95,6 @@ namespace PubgStatsBot
         private async Task MessageReceivedAsync(SocketMessage message)
         {
           
-
-         
-            var messageHelper = new MessageHelper(_client, message);
-            // The bot should never respond to itself.
-            if (message.Author.Id == _client.CurrentUser.Id)
-                return;
-            Console.WriteLine($"{message.Author.Username} {Strings.Requested}");
-
-
-           
-          
-                if (message.Content.ToLower().StartsWith("!addwatch"))
-                {
-                    await messageHelper.AddPlayerToWatch(message);
-
-                }
-                if (message.Content.ToLower().StartsWith("!mywatch"))
-                {
-                    await messageHelper.MyWatch(message);
-
-                }
-
-            
         }
 
 

@@ -49,6 +49,10 @@ namespace PubgStatsBot
                     await Task.Delay(10000);
                     Console.WriteLine("Client Cached.");
 
+                    var us = await client.Rest.GetUserAsync(Credentials.UserID);
+                    await Discord.UserExtensions.SendMessageAsync(us, "bot is online");
+
+
                     // Here we initialize the logic required to register our commands.
                     await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
 
