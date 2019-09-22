@@ -129,6 +129,9 @@
   <data name="HelpDescription" xml:space="preserve">
     <value>You can use this bot via the commans listed below</value>
   </data>
+  <data name="InviteDesc" xml:space="preserve">
+    <value>To add this bot in your server please click the link</value>
+  </data>
   <data name="IsConnected" xml:space="preserve">
     <value>is connected!</value>
   </data>

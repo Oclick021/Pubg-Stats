@@ -105,12 +105,6 @@ namespace PubgStatsBot
 
 
 
-                if (message.Content.EqualsAnyOf("!help", "!Help", "!HELP"))
-                {
-                    await message.Channel.SendMessageAsync(embed: EmbedHelper.GetHelp());
-                }
-
-
                 if (message.Content.ToLower().StartsWith("!stats"))
                 {
                     await messageHelper.GetStats(message);
@@ -136,11 +130,7 @@ namespace PubgStatsBot
                 {
                     await messageHelper.GetMatchStats(message);
                 }
-                if (message.Content.ToLower().StartsWith("!invite"))
-                {
-                    await message.Channel.SendMessageAsync(@"https://discordapp.com/api/oauth2/authorize?client_id=605829109335064593&permissions=0&scope=bot");
-
-                }
+          
                 if (message.Content.ToLower().StartsWith("!addwatch"))
                 {
                     await messageHelper.AddPlayerToWatch(message);

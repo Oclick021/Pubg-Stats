@@ -97,6 +97,15 @@ namespace PubgStatsBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To add this bot in your server please click the link.
+        /// </summary>
+        internal static string InviteDesc {
+            get {
+                return ResourceManager.GetString("InviteDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to is connected!.
         /// </summary>
         internal static string IsConnected {
