@@ -26,32 +26,36 @@ namespace PubgStatsBot
             // when you are finished using it, at the end of your app's lifetime.
             // If you use another dependency injection framework, you should inspect
             // its documentation for the best way to do this.
-            using (var services = ConfigureServices())
+
+
+            if (Config.Validate())
             {
-                var client = services.GetRequiredService<DiscordSocketClient>();
+                using (var services = ConfigureServices())
+                {
+                    var client = services.GetRequiredService<DiscordSocketClient>();
 
-                client.Log += LogAsync;
-                services.GetRequiredService<CommandService>().Log += LogAsync;
+                    client.Log += LogAsync;
+                    services.GetRequiredService<CommandService>().Log += LogAsync;
 
-                // Tokens should be considered secret data and never hard-coded.
-                // We can read from the environment variable to avoid hardcoding.
-                await client.LoginAsync(TokenType.Bot, Credentials.DiscordToken);
-                await client.StartAsync();
+                    // Tokens should be considered secret data and never hard-coded.
+                    // We can read from the environment variable to avoid hardcoding.
+                    await client.LoginAsync(TokenType.Bot, Credentials.DiscordToken);
+                    await client.StartAsync();
 
 
-#if ReleaseOnly
-                var guilds = await client.Rest.GetGuildsAsync();
-                await client.DownloadUsersAsync(guilds);
-                Console.WriteLine("Caching client... Please wait");
-                await Task.Delay(10000);
-                Console.WriteLine("Client Cached.");
-#endif
+                    var guilds = await client.Rest.GetGuildsAsync();
+                    await client.DownloadUsersAsync(guilds);
+                    Console.WriteLine("Caching client... Please wait");
+                    await Task.Delay(10000);
+                    Console.WriteLine("Client Cached.");
 
-                // Here we initialize the logic required to register our commands.
-                await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
+                    // Here we initialize the logic required to register our commands.
+                    await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
 
-                await Task.Delay(-1);
+                    await Task.Delay(-1);
+                }
             }
+
         }
 
         private Task LogAsync(LogMessage log)

@@ -96,10 +96,7 @@ namespace PubgStatsBot
         {
           
 
-            if (message.Content.ToLower().StartsWith("!ping"))
-            {
-                await message.Channel.SendMessageAsync("pong!");
-            }
+         
             var messageHelper = new MessageHelper(_client, message);
             // The bot should never respond to itself.
             if (message.Author.Id == _client.CurrentUser.Id)
@@ -107,21 +104,6 @@ namespace PubgStatsBot
             Console.WriteLine($"{message.Author.Username} {Strings.Requested}");
 
 
-
-            if (await messageHelper.IsAuthorized())
-            {
-
-                if (message.Content.StartsWith("AllUsersStatus") && message.Author.Id == Credentials.UserID)
-                {
-                  await  messageHelper.GetOnlineUsers();
-                }
-
-                if (message.Content.ToLower().StartsWith("!test"))
-                {
-                    await Watcher.StartWatch(message);
-
-                    await messageHelper.GetStats(message);
-                }
 
                 if (message.Content.EqualsAnyOf("!help", "!Help", "!HELP"))
                 {
@@ -170,7 +152,7 @@ namespace PubgStatsBot
 
                 }
 
-            }
+            
         }
 
 
