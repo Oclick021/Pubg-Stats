@@ -9,8 +9,8 @@ using PubgSDK.Helpers;
 namespace PubgSDK.Migrations
 {
     [DbContext(typeof(PubgDB))]
-    [Migration("20190920120000_init")]
-    partial class init
+    [Migration("20190922161943_playermatchadded")]
+    partial class playermatchadded
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -158,11 +158,13 @@ namespace PubgSDK.Migrations
 
                     b.Property<string>("MatchId");
 
+                    b.Property<int>("ID");
+
                     b.HasKey("PlayerId", "MatchId");
 
                     b.HasIndex("MatchId");
 
-                    b.ToTable("PlayerMatch");
+                    b.ToTable("PlayerMatches");
                 });
 
             modelBuilder.Entity("PubgSDK.Models.Roster", b =>

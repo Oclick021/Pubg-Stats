@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PubgSDK.Migrations
 {
-    public partial class init : Migration
+    public partial class playermatchadded : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -171,23 +171,24 @@ namespace PubgSDK.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PlayerMatch",
+                name: "PlayerMatches",
                 columns: table => new
                 {
                     PlayerId = table.Column<string>(nullable: false),
-                    MatchId = table.Column<string>(nullable: false)
+                    MatchId = table.Column<string>(nullable: false),
+                    ID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlayerMatch", x => new { x.PlayerId, x.MatchId });
+                    table.PrimaryKey("PK_PlayerMatches", x => new { x.PlayerId, x.MatchId });
                     table.ForeignKey(
-                        name: "FK_PlayerMatch_Matches_MatchId",
+                        name: "FK_PlayerMatches_Matches_MatchId",
                         column: x => x.MatchId,
                         principalTable: "Matches",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PlayerMatch_Players_PlayerId",
+                        name: "FK_PlayerMatches_Players_PlayerId",
                         column: x => x.PlayerId,
                         principalTable: "Players",
                         principalColumn: "Id",
@@ -205,8 +206,8 @@ namespace PubgSDK.Migrations
                 column: "StatsID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PlayerMatch_MatchId",
-                table: "PlayerMatch",
+                name: "IX_PlayerMatches_MatchId",
+                table: "PlayerMatches",
                 column: "MatchId");
 
             migrationBuilder.CreateIndex(
@@ -236,7 +237,7 @@ namespace PubgSDK.Migrations
                 name: "Participants");
 
             migrationBuilder.DropTable(
-                name: "PlayerMatch");
+                name: "PlayerMatches");
 
             migrationBuilder.DropTable(
                 name: "Rosters");

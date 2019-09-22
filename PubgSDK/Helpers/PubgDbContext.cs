@@ -42,6 +42,7 @@ namespace PubgSDK.Helpers
         public DbSet<Roster> Rosters { get; set; }
         public DbSet<Participant> Participants { get; set; }
         public DbSet<ParticipantsStats> ParticipantsStats { get; set; }
+        public DbSet<PlayerMatch> PlayerMatches { get; set; }
 
 
 

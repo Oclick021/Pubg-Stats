@@ -156,11 +156,13 @@ namespace PubgSDK.Migrations
 
                     b.Property<string>("MatchId");
 
+                    b.Property<int>("ID");
+
                     b.HasKey("PlayerId", "MatchId");
 
                     b.HasIndex("MatchId");
 
-                    b.ToTable("PlayerMatch");
+                    b.ToTable("PlayerMatches");
                 });
 
             modelBuilder.Entity("PubgSDK.Models.Roster", b =>
