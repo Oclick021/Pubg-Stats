@@ -22,7 +22,7 @@ namespace PubgSDK.Models
         public virtual SeasonStats SquadStats { get; set; }
         public string SquadStatsID { get; set; }
 
-        public virtual IEnumerable<PlayerMatch> Matches { get; set; }
+        public virtual List<PlayerMatch> Matches { get; set; }
         public DateTime? CurrentSeasionLastUpdate { get; set; }
         public DateTime? LastMatchUpdate { get; set; }
 
@@ -38,37 +38,27 @@ namespace PubgSDK.Models
 
         public async Task GetMatches(PubgPlayer player = null)
         {
+            if (Matches == null)
+                Matches = new List<PlayerMatch>();
+
             if (LastMatchUpdate == null || LastMatchUpdate < DateTime.Now.AddMinutes(-10))
             {
                 if (player == null)
                 {
                     player = await PubgHelper.GetPubgPlayer(Id);
                 }
-                var list = new List<PlayerMatch>();
 
                 foreach (var matchId in player.MatchIds.Take(10))
                 {
 
                     var matchFound = await PubgDB.Instance.Matches.Where(m => m.Id == matchId).FirstOrDefaultAsync();
                     if (matchFound == null)
-                    {
                         matchFound = await PubgHelper.GetPubgMatch(matchId);
-                    }
-                    else
-                    {
-                        PubgDB.Instance.Matches.Attach(matchFound);
-                    }
-                    list.Add(new PlayerMatch() { Player = this, Match = matchFound });
+
+                    if (!Matches.Any(m => m.MatchId == matchFound.Id))
+                        Matches.Add(new PlayerMatch() { Player = this, Match = matchFound });
                 }
 
-                if (Matches == null || Matches.Count() == 0)
-                {
-                    Matches = list;
-                }
-                else
-                {
-                    Matches.Concat(list);
-                }
 
                 LastMatchUpdate = DateTime.Now;
                 await SaveAsync();

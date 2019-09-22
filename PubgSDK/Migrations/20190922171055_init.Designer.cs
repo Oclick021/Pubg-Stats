@@ -9,8 +9,8 @@ using PubgSDK.Helpers;
 namespace PubgSDK.Migrations
 {
     [DbContext(typeof(PubgDB))]
-    [Migration("20190922161943_playermatchadded")]
-    partial class playermatchadded
+    [Migration("20190922171055_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
