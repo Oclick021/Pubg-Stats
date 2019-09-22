@@ -104,32 +104,7 @@ namespace PubgStatsBot
             Console.WriteLine($"{message.Author.Username} {Strings.Requested}");
 
 
-
-                if (message.Content.ToLower().StartsWith("!stats"))
-                {
-                    await messageHelper.GetStats(message);
-                }
-                if (message.Content.ToLower().StartsWith("!solo"))
-                {
-                    await messageHelper.GetStats(message);
-                }
-                if (message.Content.ToLower().StartsWith("!duo"))
-                {
-                    await messageHelper.GetStats(message);
-                }
-                if (message.Content.ToLower().StartsWith("!squad"))
-                {
-                    await messageHelper.GetStats(message);
-                }
-
-                if (message.Content.ToLower().StartsWith("!compare"))
-                {
-                    await messageHelper.GetStatsCompare(message);
-                }
-                if (message.Content.ToLower().StartsWith("!recents"))
-                {
-                    await messageHelper.GetMatchStats(message);
-                }
+           
           
                 if (message.Content.ToLower().StartsWith("!addwatch"))
                 {
