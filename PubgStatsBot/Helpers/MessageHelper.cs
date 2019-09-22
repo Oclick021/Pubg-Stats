@@ -20,32 +20,7 @@ namespace PubgStatsBot.Helpers
             _client = client;
             _message = message;
         }
-        public async Task<bool> IsAuthorized()
-        {
-            return true;
-            //Checks if the server is authorized
-            //if (!(_message.Channel is SocketGuildChannel chnl))
-            //{
-            //    if (!_client.GetChannel(Credentials.ServerID).ChannelHasUser(_message.Author))
-            //    {
-            //        await _message.Channel.SendMessageAsync(Strings.OnlyMembersCanUse);
-            //        Console.WriteLine($"{_message.Author.Username} {Strings.NotAMember}");
-            //        return false;
 
-            //    }
-            //}
-            //else
-            //{
-            //    if (chnl.Guild.Id != Credentials.ServerID)
-            //    {
-
-            //        await _message.Channel.SendMessageAsync("https://discord.gg/3FsMG3", embed: new EmbedBuilder() { Description = "این بات موقتا فقط برای استفاده در PubgStat میباشد لطفا ابتدا عوض گروه شوید", Color = Color.Gold }.Build());
-            //        Console.WriteLine($"{_message.Author.Username} {Strings.NotAMember}");
-            //        return false;
-            //    }
-            //}
-            //return true;
-        }
         public async Task GetStats(SocketMessage message)
         {
             var player = await GetPlayer("stats", message);

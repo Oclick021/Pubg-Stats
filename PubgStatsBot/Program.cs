@@ -1,10 +1,13 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Microsoft.Extensions.DependencyInjection;
 using PubgSDK.Extentions;
 using PubgStatsBot.Helpers;
+using PubgStatsBot.Services;
 using System;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,8 +35,17 @@ namespace PubgStatsBot
 
                 // Tokens should be considered secret data and never hard-coded.
                 // We can read from the environment variable to avoid hardcoding.
-                await client.LoginAsync(TokenType.Bot,Credentials.DiscordToken);
+                await client.LoginAsync(TokenType.Bot, Credentials.DiscordToken);
                 await client.StartAsync();
+
+
+#if ReleaseOnly
+                var guilds = await client.Rest.GetGuildsAsync();
+                await client.DownloadUsersAsync(guilds);
+                Console.WriteLine("Caching client... Please wait");
+                await Task.Delay(10000);
+                Console.WriteLine("Client Cached.");
+#endif
 
                 // Here we initialize the logic required to register our commands.
                 await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
@@ -56,7 +68,6 @@ namespace PubgStatsBot
                 .AddSingleton<CommandService>()
                 .AddSingleton<CommandHandlingService>()
                 .AddSingleton<HttpClient>()
-                .AddSingleton<PictureService>()
                 .BuildServiceProvider();
         }
     }
