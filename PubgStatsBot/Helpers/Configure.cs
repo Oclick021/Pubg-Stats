@@ -17,8 +17,8 @@ namespace PubgStatsBot.Helpers
 
                 // Create the Db if it doesn't exist and applies any pending migration.
                 BotDBContext.Instance.Database.Migrate();
-                new PubgSDK.Helpers.Configure();
             }
+            new PubgSDK.Helpers.Configure();
 
         }
     }
