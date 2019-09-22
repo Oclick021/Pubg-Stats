@@ -96,14 +96,17 @@ namespace PubgStatsBot.Helpers
             };
 
             embedBuilder.AddField(new EmbedFieldBuilder() { Name = "!help", Value = Strings.Help });
+            embedBuilder.AddField(new EmbedFieldBuilder() { Name = "!invite", Value = Strings.InviteDesc });
             embedBuilder.AddField(new EmbedFieldBuilder() { Name = "!stats [Your pubg username]", Value = Strings.PlayersStats });
-            embedBuilder.AddField(new EmbedFieldBuilder() { Name = "!solo [Your pubg username] | disabled", Value = Strings.SoloStats });
-            embedBuilder.AddField(new EmbedFieldBuilder() { Name = "!duo [Your pubg username] | disabled", Value = Strings.DuoStats });
-            embedBuilder.AddField(new EmbedFieldBuilder() { Name = "!squad [Your pubg username] | disabled", Value = Strings.SquadStats });
+            embedBuilder.AddField(new EmbedFieldBuilder() { Name = "!solo [Your pubg username]", Value = Strings.SoloStats });
+            embedBuilder.AddField(new EmbedFieldBuilder() { Name = "!duo [Your pubg username]", Value = Strings.DuoStats });
+            embedBuilder.AddField(new EmbedFieldBuilder() { Name = "!squad [Your pubg username] ", Value = Strings.SquadStats });
             embedBuilder.AddField(new EmbedFieldBuilder() { Name = "!compare [Player1],[Player2]", Value = Strings.Compare });
             embedBuilder.AddField(new EmbedFieldBuilder() { Name = "!recents [Your pubg username]", Value = Strings.RecentsStats });
-            embedBuilder.AddField(new EmbedFieldBuilder() { Name = "!addWatch  [Your pubg username] | disabled", Value = Strings.Watch });
-            embedBuilder.AddField(new EmbedFieldBuilder() { Name = "!removeWatch                    | disabled", Value = Strings.RemoveWatch });
+            embedBuilder.AddField(new EmbedFieldBuilder() { Name = "Watch service", Value = Strings.Watch });
+            embedBuilder.AddField(new EmbedFieldBuilder() { Name = "!addWatch  [Your pubg username] ", Value = Strings.AddWatchDesc });
+            embedBuilder.AddField(new EmbedFieldBuilder() { Name = "!myWatch ", Value = Strings.MyWatchDesc });
+            embedBuilder.AddField(new EmbedFieldBuilder() { Name = "!removeWatch [Your pubg username]", Value = Strings.RemoveWatch });
 
             embedBuilder.WithFooter(new EmbedFooterBuilder() { Text = "با تشکر", IconUrl = "http://icons.iconarchive.com/icons/graphicloads/100-flat/256/home-icon.png" });
             return embedBuilder.Build();

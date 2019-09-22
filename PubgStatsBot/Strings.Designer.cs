@@ -61,6 +61,15 @@ namespace PubgStatsBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adds player to your watch.
+        /// </summary>
+        internal static string AddWatchDesc {
+            get {
+                return ResourceManager.GetString("AddWatchDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Compare two players stats.
         /// </summary>
         internal static string Compare {
@@ -97,7 +106,7 @@ namespace PubgStatsBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To add this bot in your server please click the link.
+        ///   Looks up a localized string similar to Add this bot to your server.
         /// </summary>
         internal static string InviteDesc {
             get {
@@ -111,6 +120,15 @@ namespace PubgStatsBot {
         internal static string IsConnected {
             get {
                 return ResourceManager.GetString("IsConnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get the list of Pubg accounts added to your account.
+        /// </summary>
+        internal static string MyWatchDesc {
+            get {
+                return ResourceManager.GetString("MyWatchDesc", resourceCulture);
             }
         }
         
@@ -156,6 +174,15 @@ namespace PubgStatsBot {
         internal static string PlayerIsAlreadySaved {
             get {
                 return ResourceManager.GetString("PlayerIsAlreadySaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PlayerIsNotInYourWatch.
+        /// </summary>
+        internal static string PlayerIsNotInYourWatch {
+            get {
+                return ResourceManager.GetString("PlayerIsNotInYourWatch", resourceCulture);
             }
         }
         
@@ -268,11 +295,29 @@ namespace PubgStatsBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Notify me when my team gets a chicken dinner.
+        ///   Looks up a localized string similar to is a service where you can add a pubg player to your watch and whenever that player gets a chicken dinner or top10 you will get a message from me with the stats of that match (included teammates).
         /// </summary>
         internal static string Watch {
             get {
                 return ResourceManager.GetString("Watch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watch is successfully removed!.
+        /// </summary>
+        internal static string WatchRemovedSuccess {
+            get {
+                return ResourceManager.GetString("WatchRemovedSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have no watches to remove.
+        /// </summary>
+        internal static string YouHaveNoWatches {
+            get {
+                return ResourceManager.GetString("YouHaveNoWatches", resourceCulture);
             }
         }
         

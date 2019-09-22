@@ -144,7 +144,7 @@ namespace PubgStatsBot.Modules
 
         [Command("addwatch")]
 
-        public async Task AddWatch(IUser discordUser, [Remainder] string playersName = null)
+        public async Task AddWatch([Remainder] string playersName = null)
         {
             if (playersName == null)
             {
@@ -160,13 +160,13 @@ namespace PubgStatsBot.Modules
             }
 
 
-            var user = await BotDBContext.Instance.Users.FirstOrDefaultAsync(u => u.DiscordId == discordUser.Id);
+            var user = await BotDBContext.Instance.Users.FirstOrDefaultAsync(u => u.DiscordId == Context.User.Id);
             if (user == null) //It is a new User
             {
 
                 var newUsersPlayer = new Model.UsersPlayers()
                 {
-                    User = new Model.User() { DiscordId = discordUser.Id, Name = discordUser.Username },
+                    User = new Model.User() { DiscordId = Context.User.Id, Name = Context.User.Username },
                     Players = new List<Model.Player>
             {
                 new PubgStatsBot.Model.Player() { PubgID = player.Id }
@@ -200,10 +200,54 @@ namespace PubgStatsBot.Modules
 
         }
 
-        [Command("Mywatch")]
+        [Command("removewatch")]
 
-        public async Task MyWatch(IUser discordUser)
+        public async Task RemoveWatch([Remainder] string playersName = null)
         {
+            if (playersName == null)
+            {
+                await ReplyAsync(Strings.PlayerNameRequired);
+                return;
+            }
+
+            var player = await PubgHelper.GetPlayerByName(playersName);
+            if (player == null)
+            {
+                await ReplyAsync(Strings.PlayerNotFound);
+                return;
+            }
+
+
+            var user = await BotDBContext.Instance.Users.FirstOrDefaultAsync(u => u.DiscordId == Context.User.Id);
+            if (user == null) //It is a new User
+            {
+                await ReplyAsync(Strings.YouHaveNoWatches);
+                return;
+            }
+            else
+            {
+                var usersPlayers = await BotDBContext.Instance.UsersPlayers.Where(u => u.UserID == user.ID).Include(p => p.Players).FirstOrDefaultAsync();
+                if (usersPlayers == null)
+                {
+                    await ReplyAsync(Strings.PlayerIsNotInYourWatch);
+                    return;
+                }
+                var players = usersPlayers.Players.ToList();
+                var playerInList = players.FirstOrDefault(p => p.PubgID == player.Id);
+                if (playerInList != null)
+                    players.Remove(playerInList);
+
+                usersPlayers.Players = players;
+                BotDBContext.Instance.UsersPlayers.Update(usersPlayers);
+                await BotDBContext.Instance.SaveChangesAsync();
+                await ReplyAsync(Strings.WatchRemovedSuccess);
+            }
+
+        }
+        [Command("mywatch")]
+        public async Task MyWatch()
+        {
+            var discordUser = Context.User;
             var user = await BotDBContext.Instance.Users.FirstOrDefaultAsync(u => u.DiscordId == discordUser.Id);
             if (user != null)
             {

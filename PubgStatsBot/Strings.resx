@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddWatchDesc" xml:space="preserve">
+    <value>Adds player to your watch</value>
+  </data>
   <data name="Compare" xml:space="preserve">
     <value>Compare two players stats</value>
   </data>
@@ -130,10 +133,13 @@
     <value>You can use this bot via the commans listed below</value>
   </data>
   <data name="InviteDesc" xml:space="preserve">
-    <value>To add this bot in your server please click the link</value>
+    <value>Add this bot to your server</value>
   </data>
   <data name="IsConnected" xml:space="preserve">
     <value>is connected!</value>
+  </data>
+  <data name="MyWatchDesc" xml:space="preserve">
+    <value>Get the list of Pubg accounts added to your account</value>
   </data>
   <data name="NotAMember" xml:space="preserve">
     <value>is Not a member</value>
@@ -149,6 +155,9 @@
   </data>
   <data name="PlayerIsAlreadySaved" xml:space="preserve">
     <value>بازیکن قبلا برای شما ثبت شده است</value>
+  </data>
+  <data name="PlayerIsNotInYourWatch" xml:space="preserve">
+    <value>PlayerIsNotInYourWatch</value>
   </data>
   <data name="PlayerNameHasSpace" xml:space="preserve">
     <value>Player name contains Space</value>
@@ -187,7 +196,13 @@
     <value>Title</value>
   </data>
   <data name="Watch" xml:space="preserve">
-    <value>Notify me when my team gets a chicken dinner</value>
+    <value>is a service where you can add a pubg player to your watch and whenever that player gets a chicken dinner or top10 you will get a message from me with the stats of that match (included teammates)</value>
+  </data>
+  <data name="WatchRemovedSuccess" xml:space="preserve">
+    <value>Watch is successfully removed!</value>
+  </data>
+  <data name="YouHaveNoWatches" xml:space="preserve">
+    <value>You have no watches to remove</value>
   </data>
   <data name="YourPlayers" xml:space="preserve">
     <value>Your players: </value>
