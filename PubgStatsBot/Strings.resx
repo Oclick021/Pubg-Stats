@@ -150,8 +150,14 @@
   <data name="PlayerNameHasSpace" xml:space="preserve">
     <value>Player name contains Space</value>
   </data>
+  <data name="PlayerNameRequired" xml:space="preserve">
+    <value>Player name is not given!</value>
+  </data>
   <data name="PlayerNotFound" xml:space="preserve">
     <value>Player with this name not found</value>
+  </data>
+  <data name="PlayersNamesRequired" xml:space="preserve">
+    <value>Please Enter the name of two players!</value>
   </data>
   <data name="PlayersStats" xml:space="preserve">
     <value>Get players stats</value>

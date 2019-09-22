@@ -160,11 +160,29 @@ namespace PubgStatsBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Player name is not given!.
+        /// </summary>
+        internal static string PlayerNameRequired {
+            get {
+                return ResourceManager.GetString("PlayerNameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Player with this name not found.
         /// </summary>
         internal static string PlayerNotFound {
             get {
                 return ResourceManager.GetString("PlayerNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please Enter the name of two players!.
+        /// </summary>
+        internal static string PlayersNamesRequired {
+            get {
+                return ResourceManager.GetString("PlayersNamesRequired", resourceCulture);
             }
         }
         
