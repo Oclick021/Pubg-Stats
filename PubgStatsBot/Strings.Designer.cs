@@ -124,6 +124,15 @@ namespace PubgStatsBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MVP of the match.
+        /// </summary>
+        internal static string MatchMVPIconDesc {
+            get {
+                return ResourceManager.GetString("MatchMVPIconDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Get the list of Pubg accounts added to your account.
         /// </summary>
         internal static string MyWatchDesc {
@@ -273,6 +282,15 @@ namespace PubgStatsBot {
         internal static string SquadStats {
             get {
                 return ResourceManager.GetString("SquadStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MVP of the team.
+        /// </summary>
+        internal static string TeamMVPIconDesc {
+            get {
+                return ResourceManager.GetString("TeamMVPIconDesc", resourceCulture);
             }
         }
         

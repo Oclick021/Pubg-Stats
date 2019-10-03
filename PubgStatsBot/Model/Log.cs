@@ -4,13 +4,14 @@ using System.Text;
 
 namespace PubgStatsBot.Model
 {
-    public class UsersPlayers
+    public class Log
     {
-        public int ID { get; set; }
+        public ulong ID { get; set; }
+
+        public string Content { get; set; }
+        public DateTime? Date { get; set; }
         public User User { get; set; }
         public int UserID { get; set; }
-        public  IEnumerable<Player> Players { get; set; }
-
 
     }
 }

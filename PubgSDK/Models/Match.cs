@@ -38,6 +38,22 @@ namespace PubgSDK.Models
             }
             return null;
         }
+
+        public Participant GetMatchMVP()
+        {
+            Participant mvp = null;
+            foreach (var roster in Rosters)
+            {
+                foreach (var participant in roster.Participants)
+                {
+                    if (mvp == null || mvp.Stats == null || participant.Stats.DamageDealt > mvp.Stats.DamageDealt)
+                    {
+                        mvp = participant;
+                    }
+                }
+            }
+            return mvp;
+        }
         public IEnumerable<Participant> GetMyTeam(string playerName)
         {
             foreach (var roster in Rosters)
@@ -79,11 +95,11 @@ namespace PubgSDK.Models
             values.AppendLine(stats.Kills.ToString());
             values.AppendLine(stats.HeadshotKills.ToString());
             values.AppendLine(stats.Assists.ToString());
-            values.AppendLine(stats.LongestKill.ToString("F1")+ "  M");
+            values.AppendLine(stats.LongestKill.ToString("F1") + "  M");
             values.AppendLine(stats.KillStreaks.ToString());
             values.AppendLine(stats.DBNOs.ToString());
             values.AppendLine(stats.Revives.ToString());
-            values.AppendLine(new TimeSpan(0,0, (int)stats.TimeSurvived).ToString());
+            values.AppendLine(new TimeSpan(0, 0, (int)stats.TimeSurvived).ToString());
             values.AppendLine(CreatedAt.TimeAgo());
 
             return values.ToString();

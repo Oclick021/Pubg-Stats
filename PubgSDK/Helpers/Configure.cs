@@ -17,12 +17,15 @@ namespace PubgSDK.Helpers
                 opt.ApiKey = Credentials.PubgToken;
             });
 
-
-            if (!PubgDB.Instance.Database.GetService<IRelationalDatabaseCreator>().Exists())
+            using (var con = new PubgDB())
             {
 
-                // Create the Db if it doesn't exist and applies any pending migration.
-                PubgDB.Instance.Database.Migrate();
+                if (!con.Database.GetService<IRelationalDatabaseCreator>().Exists())
+                {
+
+                    // Create the Db if it doesn't exist and applies any pending migration.
+                    con.Database.Migrate();
+                } 
             }
         }
     }

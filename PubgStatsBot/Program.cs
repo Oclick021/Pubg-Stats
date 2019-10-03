@@ -40,18 +40,23 @@ namespace PubgStatsBot
                     // Tokens should be considered secret data and never hard-coded.
                     // We can read from the environment variable to avoid hardcoding.
                     await client.LoginAsync(TokenType.Bot, Credentials.DiscordToken);
+
+                    client.Connected += async () =>
+                    {
+                        //send message to client asynchronously
+                        var guilds = await client.Rest.GetGuildsAsync();
+                        await client.DownloadUsersAsync(guilds);
+                        Console.WriteLine("Caching client... Please wait");
+                        await Task.Delay(10000);
+                        Console.WriteLine("Client Cached.");
+                        Console.WriteLine("Watchers Starting...");
+                        var watch = new Watcher(client);
+                    };
+
                     await client.StartAsync();
-
-
-                    var guilds = await client.Rest.GetGuildsAsync();
-                    await client.DownloadUsersAsync(guilds);
-                    Console.WriteLine("Caching client... Please wait");
-                    await Task.Delay(10000);
-                    Console.WriteLine("Client Cached.");
 
                     var us = await client.Rest.GetUserAsync(Credentials.UserID);
                     await Discord.UserExtensions.SendMessageAsync(us, "bot is online");
-
 
                     // Here we initialize the logic required to register our commands.
                     await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
@@ -59,13 +64,11 @@ namespace PubgStatsBot
                     await Task.Delay(-1);
                 }
             }
-
         }
 
         private Task LogAsync(LogMessage log)
         {
             Console.WriteLine(log.ToString());
-
             return Task.CompletedTask;
         }
 

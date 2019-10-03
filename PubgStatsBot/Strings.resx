@@ -138,6 +138,9 @@
   <data name="IsConnected" xml:space="preserve">
     <value>is connected!</value>
   </data>
+  <data name="MatchMVPIconDesc" xml:space="preserve">
+    <value>MVP of the match</value>
+  </data>
   <data name="MyWatchDesc" xml:space="preserve">
     <value>Get the list of Pubg accounts added to your account</value>
   </data>
@@ -188,6 +191,9 @@
   </data>
   <data name="SquadStats" xml:space="preserve">
     <value>Get Players Squads Stats</value>
+  </data>
+  <data name="TeamMVPIconDesc" xml:space="preserve">
+    <value>MVP of the team</value>
   </data>
   <data name="Thanks" xml:space="preserve">
     <value>Thank you!</value>

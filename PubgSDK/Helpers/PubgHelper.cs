@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Pubg.Net;
 using PubgSDK.Models;
+using PubgSDK.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,36 +17,15 @@ namespace PubgSDK.Helpers
         /// <summary>
         /// Retrieves Players data from database. if doesnt exists then GetPubgPlayer method is called
         /// </summary>
-        public static async Task<Player> GetPlayerByName(string name)
-        {
-            var playerFound = await PubgDB.Instance.Players
-              .Where(p => p.Name == name).FirstOrDefaultAsync();
-
-            if (playerFound == null)
-            {
-                var onlinePlayer = await GetPubgPlayer(name: name);
-                if (onlinePlayer != null)
-                {
-                    playerFound = new Player() { Name = name, Id = onlinePlayer.Id };
-                    await playerFound.GetPlayerStats();
-                    await playerFound.GetMatches(onlinePlayer);
-
-                }
-            }
-            else
-            {
-                await playerFound.GetPlayerStats();
-                await playerFound.GetMatches();
-            }
-            return playerFound;
-        }
 
         public static async Task<IEnumerable<Player>> GetPlayersByName(string[] names)
         {
             var players = new List<Player>();
             foreach (string name in names)
             {
-                players.Add(await GetPlayerByName(name));
+                var playerRep = new PlayerRepository();
+                await playerRep.GetPlayerByName(name);
+                players.Add(playerRep.Player);
             }
             return players;
         }
@@ -85,7 +65,18 @@ namespace PubgSDK.Helpers
 
 
 
-
+        public static async Task SavePubgMatch(Match match)
+        {
+            using (var con = new PubgDB())
+            {
+                var matchInDb = await con.Matches.FirstOrDefaultAsync(m => m.Id == match.Id);
+                if (matchInDb == null)
+                {
+                    con.Matches.Add(match);
+                    await con.SaveChangesAsync();
+                }
+            }
+        }
 
         public static async Task<Match> GetPubgMatch(string matchID)
         {

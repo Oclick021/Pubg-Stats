@@ -13,10 +13,11 @@ namespace PubgSDK.Helpers
 {
     public class BotDBContext : DbContext
     {
-        private static BotDBContext instance;
+        //private static BotDBContext instance;
 
         public DbSet<User> Users { get; set; }
         public DbSet<UsersPlayers> UsersPlayers { get; set; }
+        public DbSet<Log> Logs { get; set; }
 
         //Enables these commonly used commands:
         //Add-Migration
@@ -35,18 +36,18 @@ namespace PubgSDK.Helpers
             ;
         }
 
-        public static BotDBContext Instance
-        {
-            get
-            {
-                if (instance == null )
-                {
-                    instance = new BotDBContext();
-                }
-                return instance;
-            }
-            set => instance = value;
-        }
+        //public static BotDBContext Instance
+        //{
+        //    get
+        //    {
+        //        if (instance == null )
+        //        {
+        //            instance = new BotDBContext();
+        //        }
+        //        return instance;
+        //    }
+        //    set => instance = value;
+        //}
 
     }
 }

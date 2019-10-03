@@ -12,11 +12,14 @@ namespace PubgStatsBot.Helpers
     {
         public Configure()
         {
-            if (!BotDBContext.Instance.Database.GetService<IRelationalDatabaseCreator>().Exists())
+            using (var con = new BotDBContext())
             {
+                if (!con.Database.GetService<IRelationalDatabaseCreator>().Exists())
+                {
 
-                // Create the Db if it doesn't exist and applies any pending migration.
-                BotDBContext.Instance.Database.Migrate();
+                    // Create the Db if it doesn't exist and applies any pending migration.
+                    con.Database.Migrate();
+                }
             }
             new PubgSDK.Helpers.Configure();
 

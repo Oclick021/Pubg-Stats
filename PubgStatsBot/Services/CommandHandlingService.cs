@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using PubgSDK.Helpers;
+using System.Linq;
 
 namespace PubgStatsBot.Services
 {
@@ -63,16 +65,36 @@ namespace PubgStatsBot.Services
 
         public async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
         {
+            await LogAction(context);
+
             // command is unspecified when there was a search failure (command not found); we don't care about these errors
             if (!command.IsSpecified)
                 return;
 
             // the command was successful, we don't care about this result, unless we want to log that a command succeeded.
             if (result.IsSuccess)
+            {
                 return;
+            }
+
 
             // the command failed, let's notify the user that something happened.
             await context.Channel.SendMessageAsync($"error: {result}");
+        }
+        async Task LogAction(ICommandContext context)
+        {
+            using (var con = new BotDBContext())
+            {
+                var userInDb = con.Users.FirstOrDefault(u => u.DiscordId == context.User.Id);
+                if (userInDb == null)
+                {
+                    userInDb = new Model.User() { DiscordId = context.User.Id, Name = context.User.Username, UserTag = context.User.Discriminator };
+                }
+                Console.WriteLine($"User {context.User.Username} requested {context.Message.Content} ***** at {DateTime.Now.ToShortDateString()}");
+
+                await con.Logs.AddAsync(new Model.Log() { Date = DateTime.Now, Content = context.Message.Content, User = userInDb });
+                await con.SaveChangesAsync(); 
+            }
         }
     }
 }

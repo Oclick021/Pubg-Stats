@@ -12,7 +12,6 @@ namespace PubgSDK.Helpers
 {
     public class PubgDB : DbContext
     {
-        private static PubgDB instance;
 
         //Enables these commonly used commands:
         //Add-Migration
@@ -24,8 +23,7 @@ namespace PubgSDK.Helpers
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseLazyLoadingProxies()
-                .UseSqlite("Data Source=pubg.db")
+            optionsBuilder.UseSqlite("Data Source=pubg.db")
                 .EnableSensitiveDataLogging(true)
                 .EnableDetailedErrors(true);
             ;
@@ -45,21 +43,7 @@ namespace PubgSDK.Helpers
         public DbSet<PlayerMatch> PlayerMatches { get; set; }
 
 
-
-        public static PubgDB Instance
-        {
-            get
-            {
-                if (instance == null )
-                {
-                    instance = new PubgDB();
-                }
-                return instance;
-            }
-            set => instance = value;
-        }
-
-       
+     
 
 
     }

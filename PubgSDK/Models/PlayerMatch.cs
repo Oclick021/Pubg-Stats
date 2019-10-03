@@ -11,6 +11,5 @@ namespace PubgSDK.Models
         public virtual Player Player { get; set; }
         public string   MatchId { get; set; }
         public virtual Match Match { get; set; }
-
     }
 }

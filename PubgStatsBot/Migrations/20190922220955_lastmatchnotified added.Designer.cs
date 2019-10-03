@@ -2,53 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PubgSDK.Helpers;
 
 namespace PubgStatsBot.Migrations
 {
     [DbContext(typeof(BotDBContext))]
-    partial class BotDBContextModelSnapshot : ModelSnapshot
+    [Migration("20190922220955_lastmatchnotified added")]
+    partial class lastmatchnotifiedadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
-
-            modelBuilder.Entity("PubgStatsBot.Model.Log", b =>
-                {
-                    b.Property<ulong>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Content");
-
-                    b.Property<DateTime?>("Date");
-
-                    b.Property<int>("UserID");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Logs");
-                });
-
-            modelBuilder.Entity("PubgStatsBot.Model.Match", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("MatchId");
-
-                    b.Property<int?>("PlayerID");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PlayerID");
-
-                    b.ToTable("Match");
-                });
 
             modelBuilder.Entity("PubgStatsBot.Model.Player", b =>
                 {
@@ -77,8 +45,6 @@ namespace PubgStatsBot.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<string>("UserTag");
-
                     b.HasKey("ID");
 
                     b.ToTable("Users");
@@ -96,21 +62,6 @@ namespace PubgStatsBot.Migrations
                     b.HasIndex("UserID");
 
                     b.ToTable("UsersPlayers");
-                });
-
-            modelBuilder.Entity("PubgStatsBot.Model.Log", b =>
-                {
-                    b.HasOne("PubgStatsBot.Model.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("PubgStatsBot.Model.Match", b =>
-                {
-                    b.HasOne("PubgStatsBot.Model.Player")
-                        .WithMany("Matches")
-                        .HasForeignKey("PlayerID");
                 });
 
             modelBuilder.Entity("PubgStatsBot.Model.Player", b =>

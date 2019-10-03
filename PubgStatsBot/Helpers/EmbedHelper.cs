@@ -1,6 +1,7 @@
 using Discord;
 using Pubg.Net;
 using PubgSDK.Models;
+using PubgSDK.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,21 +34,43 @@ namespace PubgStatsBot.Helpers
                 Color = color,
                 Url = "https://discord.gg/3FsMG3"
             };
-
+            var playerRep = new PlayerRepository(player);
+            playerRep.LoadMatches().Wait();
             var matchList = player.Matches.Select(x => x.Match).OrderByDescending(o => o.CreatedAt).Take(10).ToArray();
             for (int i = 0; i < matchList.Length; i += 2)
             {
-                embedBuilder.AddField(new EmbedFieldBuilder() { Name = Strings.Title, Value = Match.GetTitles(), IsInline = true });
-                embedBuilder.AddField(new EmbedFieldBuilder() { Name = $"{matchList[i].GameMode} | {matchList[i].GetMapName()} | {matchList[i].GetParticipantsMatchStats(player.Name).WinPlace} ", Value = matchList[i].GetParticipantsMatchStatsString(player.Name), IsInline = true });
+
+                embedBuilder.AddField(new EmbedFieldBuilder()
+                {
+                    Name = Strings.Title,
+                    Value = Match.GetTitles(),
+                    IsInline = true
+                });
+
+                embedBuilder.AddField(new EmbedFieldBuilder()
+                {
+                    Name = $"{matchList[i].GameMode} | {matchList[i].GetMapName()} | {matchList[i].GetParticipantsMatchStats(player.Name).WinPlace} {GetMVPStar(matchList[i], player.Name)}",
+                    Value = matchList[i].GetParticipantsMatchStatsString(player.Name),
+                    IsInline = true
+                });
+
                 if (i + 1 <= matchList.Length)
                 {
-                    embedBuilder.AddField(new EmbedFieldBuilder() { Name = $"{matchList[i + 1].GameMode} | {matchList[i + 1].GetMapName()} | {matchList[i + 1].GetParticipantsMatchStats(player.Name).WinPlace} ", Value = matchList[i + 1].GetParticipantsMatchStatsString(player.Name), IsInline = true });
+                    embedBuilder.AddField(new EmbedFieldBuilder()
+                    {
+                        Name = $"{matchList[i + 1].GameMode} | {matchList[i + 1].GetMapName()} | {matchList[i + 1].GetParticipantsMatchStats(player.Name).WinPlace} {GetMVPStar(matchList[i], player.Name)}",
+                        Value = matchList[i + 1].GetParticipantsMatchStatsString(player.Name),
+                        IsInline = true
+                    });
                 }
 
             }
 
-
-            embedBuilder.WithFooter(new EmbedFooterBuilder() { Text = Strings.Thanks, IconUrl = "http://icons.iconarchive.com/icons/graphicloads/100-flat/256/home-icon.png" });
+            embedBuilder.WithFooter(new EmbedFooterBuilder()
+            {
+                Text = Strings.Thanks,
+                IconUrl = "http://icons.iconarchive.com/icons/graphicloads/100-flat/256/home-icon.png"
+            });
             return embedBuilder.Build();
         }
 
@@ -107,11 +130,103 @@ namespace PubgStatsBot.Helpers
             embedBuilder.AddField(new EmbedFieldBuilder() { Name = "!addWatch  [Your pubg username] ", Value = Strings.AddWatchDesc });
             embedBuilder.AddField(new EmbedFieldBuilder() { Name = "!myWatch ", Value = Strings.MyWatchDesc });
             embedBuilder.AddField(new EmbedFieldBuilder() { Name = "!removeWatch [Your pubg username]", Value = Strings.RemoveWatch });
+            embedBuilder.AddField(new EmbedFieldBuilder() { Name = "⭐", Value = Strings.TeamMVPIconDesc });
+            embedBuilder.AddField(new EmbedFieldBuilder() { Name = "✨", Value = Strings.MatchMVPIconDesc });
 
             embedBuilder.WithFooter(new EmbedFooterBuilder() { Text = "با تشکر", IconUrl = "http://icons.iconarchive.com/icons/graphicloads/100-flat/256/home-icon.png" });
             return embedBuilder.Build();
         }
 
+
+        public static Embed GetParticipantsStats(IEnumerable<Participant> participants, Match match)
+        {
+            var embedBuilder = new EmbedBuilder
+            {
+                Url = "https://discord.gg/3FsMG3"
+            };
+            bool isFirst = true;
+            var participantsArray = participants.OrderByDescending(m => m.Stats.DamageDealt).ToArray();
+            for (int i = 0; i < participantsArray.Length; i += 2)
+            {
+                int winplace = match.GetParticipantsMatchStats(participantsArray[i].Stats.Name).WinPlace;
+
+                if (winplace == 1)
+                {
+                    embedBuilder.Color = Color.Gold;
+                }
+                else
+                {
+                    embedBuilder.Color = Color.Blue;
+                }
+
+
+                embedBuilder.AddField(new EmbedFieldBuilder() { Name = $"{match.GameMode} | {match.GetMapName()} | {winplace} ", Value = Match.GetTitles(), IsInline = true });
+                if (isFirst && participants.Count() > 1)
+                {
+                    string star = "⭐";
+                    if (match.GetMatchMVP() == participantsArray[i])
+                    {
+                        star += GetMVPStar(match, participantsArray[i].Stats.Name);
+                    }
+                    isFirst = false;
+                    embedBuilder.AddField(new EmbedFieldBuilder() { Name = $"{participantsArray[i].Stats.Name} {star}", Value = match.GetParticipantsMatchStatsString(participantsArray[i].Stats.Name), IsInline = true });
+                }
+                else
+                {
+                    embedBuilder.AddField(new EmbedFieldBuilder() { Name = $"{participantsArray[i].Stats.Name}", Value = match.GetParticipantsMatchStatsString(participantsArray[i].Stats.Name), IsInline = true });
+                }
+                if (i + 1 <= participantsArray.Length - 1)
+                {
+                    embedBuilder.AddField(new EmbedFieldBuilder() { Name = $"{participantsArray[i + 1].Stats.Name}", Value = match.GetParticipantsMatchStatsString(participantsArray[i + 1].Stats.Name), IsInline = true });
+                }
+
+            }
+            if (participantsArray.Length == 3)
+            {
+                embedBuilder.AddField(new EmbedFieldBuilder() { Name = "3 man squad", Value = "Who needs 4 players?", IsInline = true }); ;
+            }
+            return embedBuilder.Build();
+        }
+
+        static string GetMVPStar(Match match, string playerName)
+        {
+            if (match.GetMatchMVP().Stats.Name == playerName)
+            {
+                return "✨";
+            }
+            return "";
+        }
+
+        //public static Embed GetWatchMatch(List<Player> players, string matchID)
+        //{
+
+
+
+
+
+        //    //var embedBuilder = new EmbedBuilder
+        //    //{
+        //    //    Color = color,
+        //    //    Url = "https://discord.gg/3FsMG3"
+        //    //};
+        //    //player.Matches
+
+        //    //var matchList = player.Matches.Select(x => x.Match).OrderByDescending(o => o.CreatedAt).Take(10).ToArray();
+        //    //for (int i = 0; i < matchList.Length; i += 2)
+        //    //{
+        //    //    embedBuilder.AddField(new EmbedFieldBuilder() { Name = Strings.Title, Value = Match.GetTitles(), IsInline = true });
+        //    //    embedBuilder.AddField(new EmbedFieldBuilder() { Name = $"{matchList[i].GameMode} | {matchList[i].GetMapName()} | {matchList[i].GetParticipantsMatchStats(player.Name).WinPlace} ", Value = matchList[i].GetParticipantsMatchStatsString(player.Name), IsInline = true });
+        //    //    if (i + 1 <= matchList.Length)
+        //    //    {
+        //    //        embedBuilder.AddField(new EmbedFieldBuilder() { Name = $"{matchList[i + 1].GameMode} | {matchList[i + 1].GetMapName()} | {matchList[i + 1].GetParticipantsMatchStats(player.Name).WinPlace} ", Value = matchList[i + 1].GetParticipantsMatchStatsString(player.Name), IsInline = true });
+        //    //    }
+
+        //    //}
+
+
+        //    //embedBuilder.WithFooter(new EmbedFooterBuilder() { Text = Strings.Thanks, IconUrl = "http://icons.iconarchive.com/icons/graphicloads/100-flat/256/home-icon.png" });
+        //    //return embedBuilder.Build();
+        //}
 
     }
 }
