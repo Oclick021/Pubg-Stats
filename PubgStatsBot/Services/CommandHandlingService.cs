@@ -46,7 +46,7 @@ namespace PubgStatsBot.Services
             // This value holds the offset where the prefix ends
             var argPos = 0;
             // Perform prefix check. You may want to replace this with
-            if (!message.HasCharPrefix('!', ref argPos))
+            if (!message.HasCharPrefix('!', ref argPos) && !message.HasCharPrefix('-', ref argPos))
                 return;
 
 

@@ -18,6 +18,7 @@ namespace PubgSDK.Helpers
         public DbSet<User> Users { get; set; }
         public DbSet<UsersPlayers> UsersPlayers { get; set; }
         public DbSet<Log> Logs { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         //Enables these commonly used commands:
         //Add-Migration

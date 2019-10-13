@@ -28,8 +28,15 @@ namespace PubgSDK.Repository
         }
         public async Task GetPlayerById(string id)
         {
+
             Player = await PubgDB.Players
-            .Where(p => p.Id == id).FirstOrDefaultAsync();
+                .Where(p => p.Id == id)
+                .Include(p => p.DuoStats)
+                .Include(p => p.SoloStats)
+                .Include(p => p.SquadStats)
+                .Include(p => p.Matches)
+                .FirstOrDefaultAsync();
+
 
             if (Player == null)
             {
@@ -118,14 +125,14 @@ namespace PubgSDK.Repository
             if (Player.Matches == null)
                 Player.Matches = new List<PlayerMatch>();
 
-            if (Player.LastMatchUpdate == null || Player.LastMatchUpdate < DateTime.Now.AddMinutes(-10))
+            if (Player.LastMatchUpdate == null || Player.LastMatchUpdate < DateTime.Now.AddMinutes(-Config.PlayerRefreshTime))
             {
                 if (player == null)
                 {
                     player = await PubgHelper.GetPubgPlayer(Player.Id);
                 }
 
-                foreach (var matchId in player.MatchIds.Take(10))
+                foreach (var matchId in player.MatchIds.Take(Config.NumberOfRecentMatches))
                 {
                     Match matchFound = null;
 
@@ -136,10 +143,11 @@ namespace PubgSDK.Repository
                     if (!Player.Matches.Any(m => m.MatchId == matchFound.Id))
                     {
                         Player.Matches.Add(new PlayerMatch() { Player = Player, Match = matchFound });
+                        await PubgHelper.SavePubgMatch(matchFound);
+
                         PubgDB.Attach(matchFound);
                     }
 
-                    await PubgHelper.SavePubgMatch(matchFound);
                 }
                 Player.LastMatchUpdate = DateTime.Now;
             }
@@ -149,9 +157,9 @@ namespace PubgSDK.Repository
 
         public async Task GetPlayerStats()
         {
-            if (Player.CurrentSeasionLastUpdate == null || Player.CurrentSeasionLastUpdate.Value <= DateTime.Now.AddMinutes(-15))
+            if (Player.CurrentSeasionLastUpdate == null || Player.CurrentSeasionLastUpdate.Value <= DateTime.Now.AddMinutes(-Config.PlayerRefreshTime))
             {
-                var playerSeason = await playerService.GetPlayerSeasonAsync(PubgPlatform.Steam, Player.Id, SeasonStats.CurrentSeasonID, Credentials.PubgToken);
+                var playerSeason = await playerService.GetPlayerSeasonAsync(PubgPlatform.Steam, Player.Id, SeasonStats.CurrentSeasonID, Config.PubgToken);
                 Player.SoloStats = new SeasonStats();
                 Player.SoloStats.Clone(playerSeason.GameModeStats.SoloFPP);
                 Player.DuoStats = new SeasonStats();

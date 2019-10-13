@@ -17,49 +17,48 @@ namespace PubgStatsBot.Helpers
         readonly DiscordSocketClient client;
         public Watcher(DiscordSocketClient client)
         {
-            //this.client = client;
-            //StartWatch().ConfigureAwait(false);
+            this.client = client;
+            StartWatch().ConfigureAwait(false);
         }
         public async Task StartWatch()
         {
-            await Task.Run(async () =>
-             {
-                 while (true)
-                 {
-                     List<ulong> usersList = new List<ulong>();
-                     try
-                     {
 
-                         foreach (var guild in client.Guilds)
-                         {
-                             foreach (var guildUser in guild.Users.Where(u => u.Status == UserStatus.Online))
-                             {
+            while (true)
+            {
+                List<ulong> usersList = new List<ulong>();
+                try
+                {
+                    var discordHelper = new DiscordHelper(client);
+                    var users = discordHelper.GetAllUsers();
+                    var onlineUsers = users.Where(u => u.Status == UserStatus.Online);
 
-                                 //Console.WriteLine(guildUser.Username);
-                                 if (usersList.Contains(guildUser.Id))
-                                 {
-                                     continue;
-                                 }
-                                 using (var con = new BotDBContext())
-                                 {
-                                     if (con.UsersPlayers.Include(u => u.User).Any(u => u.User.DiscordId == guildUser.Id))
-                                     {
-                                         usersList.Add(guildUser.Id);
-                                         await CheckUser(guildUser).ConfigureAwait(false);
-                                     }
-                                 }
+                    foreach (var guildUser in onlineUsers)
+                    {
 
-                             }
-                         }
-                     }
-                     catch (Exception ee)
-                     {
-                         Console.WriteLine(ee.ToString());
-                     }
+                        //Console.WriteLine(guildUser.Username);
+                        if (!usersList.Contains(guildUser.Id))
+                        {
+                            using (var con = new BotDBContext())
+                            {
+                                var userInDb = con.UsersPlayers.Include(u => u.User).ToList();
+                                if (userInDb.Any(u => u.User.DiscordId == guildUser.Id))
+                                {
+                                    usersList.Add(guildUser.Id);
+                                    await CheckUser(guildUser);
+                                }
+                            }
+                        }
 
-                     await Task.Delay(5000);
-                 }
-             });
+                    }
+                }
+                catch (Exception ee)
+                {
+                    Console.WriteLine(ee.ToString());
+                }
+                Console.WriteLine("Recycled");
+                await Task.Delay(Config.Instance.WatcherDelay * 1000 * 60);
+            }
+
             //return null;
         }
 
@@ -70,27 +69,37 @@ namespace PubgStatsBot.Helpers
                 var userInDb = await con.UsersPlayers.Include(u => u.User).Where(u => u.User.DiscordId == user.Id).Include(p => p.Players).ThenInclude(m => m.Matches).FirstOrDefaultAsync();
                 if (userInDb != null)
                 {
+                    Console.WriteLine("UserCheck");
                     foreach (var player in userInDb.Players)
                     {
                         var playerRep = new PlayerRepository();
-                     await   playerRep.GetPlayerById(player.PubgID);
+                        await playerRep.GetPlayerById(player.PubgID);
+                        await playerRep.LoadMatches();
                         foreach (var playerMatch in playerRep.Player.Matches.OrderByDescending(d => d.Match.CreatedAt))
                         {
-                            if (playerMatch.Match.CreatedAt > DateTime.Now.AddHours(-4) && !player.Matches.Any(m => m.MatchId == playerMatch.MatchId))
+                            if (playerMatch.Match.CreatedAt > DateTime.Now.AddHours(-Config.Instance.WatchRecentHours))
                             {
-                                if (playerMatch.Match.GetParticipantsMatchStats(playerRep.Player.Name).WinPlace < 10)
+                                if (!con.Notifications.Any(m => m.MatchID == playerMatch.MatchId && m.UserId == user.Id))
                                 {
-                                    var participants = playerMatch.Match.GetMyTeam(playerRep.Player.Name);
-                                    await Discord.UserExtensions.SendMessageAsync(user, embed: EmbedHelper.GetParticipantsStats(participants, playerMatch.Match));
-                                    player.Matches.Add(new Model.Match() { MatchId = playerMatch.MatchId });
-                                    con.UsersPlayers.Update(userInDb);
-                                    await con.SaveChangesAsync();
+
+
+                                    if (playerMatch.Match.GetParticipantsMatchStats(playerRep.Player.Name).WinPlace < Config.Instance.WinPlace)
+                                    {
+                                        var participants = playerMatch.Match.GetMyTeam(playerRep.Player.Name);
+                                        Console.WriteLine($"Message Sent to {user.Id} | {user.Username} {playerMatch.MatchId} at {DateTime.Now}");
+
+                                        await Discord.UserExtensions.SendMessageAsync(user, embed: EmbedHelper.GetParticipantsStats(participants, playerMatch.Match));
+                                        con.Notifications.Add(new Model.Notification() { UserId = user.Id, MatchID = playerMatch.MatchId });
+                                        await con.SaveChangesAsync();
+                                        player.Matches.Add(new Model.Match() { MatchId = playerMatch.MatchId });
+                                        con.UsersPlayers.Update(userInDb);
+                                        await con.SaveChangesAsync();
+                                    }
                                 }
+
+
                             }
-                            else
-                            {
-                                break;
-                            }
+
                         }
                     }
                 }

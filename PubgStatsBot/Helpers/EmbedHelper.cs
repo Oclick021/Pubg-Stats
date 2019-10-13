@@ -17,7 +17,7 @@ namespace PubgStatsBot.Helpers
             {
                 Title = statsType,
                 Color = color,
-                Url = "https://discord.gg/3FsMG3"
+                Url = Strings.ChannelLink
             };
 
             embedBuilder.AddField(new EmbedFieldBuilder() { Name = Strings.Title, Value = SeasonStats.GetTitles(), IsInline = true });
@@ -32,11 +32,11 @@ namespace PubgStatsBot.Helpers
             {
                 Title = statsType,
                 Color = color,
-                Url = "https://discord.gg/3FsMG3"
+                Url = Strings.ChannelLink
             };
             var playerRep = new PlayerRepository(player);
             playerRep.LoadMatches().Wait();
-            var matchList = player.Matches.Select(x => x.Match).OrderByDescending(o => o.CreatedAt).Take(10).ToArray();
+            var matchList = player.Matches.Select(x => x.Match).OrderByDescending(o => o.CreatedAt).Take(Config.Instance.NumberOfRecentMatches).ToArray();
             for (int i = 0; i < matchList.Length; i += 2)
             {
 
@@ -80,7 +80,7 @@ namespace PubgStatsBot.Helpers
             {
                 Title = StatsType,
                 Color = color,
-                Url = "https://discord.gg/3FsMG3"
+                Url = Strings.ChannelLink
             };
 
             //Solos
@@ -115,7 +115,7 @@ namespace PubgStatsBot.Helpers
                 Color = new Color(255, 0, 0),
                 Description = Strings.HelpDescription,
                 ThumbnailUrl = "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f4/f41f5b7bfcbb7f4b6fc6a79fdc978638222ffc2f_full.jpg",
-                Url = "https://discord.gg/3FsMG3"
+                Url = Strings.ChannelLink
             };
 
             embedBuilder.AddField(new EmbedFieldBuilder() { Name = "!help", Value = Strings.Help });
@@ -183,7 +183,7 @@ namespace PubgStatsBot.Helpers
             }
             if (participantsArray.Length == 3)
             {
-                embedBuilder.AddField(new EmbedFieldBuilder() { Name = "3 man squad", Value = "Who needs 4 players?", IsInline = true }); ;
+                embedBuilder.AddField(new EmbedFieldBuilder() { Name = "3 man squad", Value = "Who needs forth player?", IsInline = true }); ;
             }
             return embedBuilder.Build();
         }
@@ -196,6 +196,8 @@ namespace PubgStatsBot.Helpers
             }
             return "";
         }
+
+
 
         //public static Embed GetWatchMatch(List<Player> players, string matchID)
         //{

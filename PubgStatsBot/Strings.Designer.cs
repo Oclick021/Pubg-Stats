@@ -70,6 +70,15 @@ namespace PubgStatsBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://discord.gg/StWQYGs.
+        /// </summary>
+        internal static string ChannelLink {
+            get {
+                return ResourceManager.GetString("ChannelLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Compare two players stats.
         /// </summary>
         internal static string Compare {
@@ -84,6 +93,15 @@ namespace PubgStatsBot {
         internal static string DuoStats {
             get {
                 return ResourceManager.GetString("DuoStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Echo Sent.
+        /// </summary>
+        internal static string EchoSent {
+            get {
+                return ResourceManager.GetString("EchoSent", resourceCulture);
             }
         }
         

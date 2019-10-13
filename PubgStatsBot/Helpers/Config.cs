@@ -14,13 +14,18 @@ namespace PubgStatsBot.Helpers
 
         public string PubgToken { get; set; }
         public string DiscordToken { get; set; }
-
+        public int PlayerRefreshTime { get; set; } = 10;
+        public int WatcherDelay { get; set; } = 3;
+        public int NumberOfRecentMatches { get; set; } = 10;
+        public int WinPlace { get; set; } = 15;
+        public int WatchRecentHours { get; set; } = 3;
         public Config()
         {
          
         }
         public static bool Validate()
         {
+            Console.WriteLine("Validating...");
             string location = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
 
             new Configure();
@@ -28,7 +33,11 @@ namespace PubgStatsBot.Helpers
             {
                 Instance = JsonConvert.DeserializeObject<Config>(File.ReadAllText(location));
                 Credentials.DiscordToken = Instance.DiscordToken;
-                PubgSDK.Helpers.Credentials.PubgToken = Instance.PubgToken;
+                PubgSDK.Helpers.Config.PubgToken = Instance.PubgToken;
+                PubgSDK.Helpers.Config.PlayerRefreshTime = Instance.PlayerRefreshTime;
+                PubgSDK.Helpers.Config.WatcherDelay = Instance.WatcherDelay;
+                PubgSDK.Helpers.Config.NumberOfRecentMatches = Instance.NumberOfRecentMatches;
+                Console.WriteLine("Validated");
                 return true;
             }
             else

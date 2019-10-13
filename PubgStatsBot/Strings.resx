@@ -120,11 +120,17 @@
   <data name="AddWatchDesc" xml:space="preserve">
     <value>Adds player to your watch</value>
   </data>
+  <data name="ChannelLink" xml:space="preserve">
+    <value>https://discord.gg/StWQYGs</value>
+  </data>
   <data name="Compare" xml:space="preserve">
     <value>Compare two players stats</value>
   </data>
   <data name="DuoStats" xml:space="preserve">
     <value>Get Players Duo Stats</value>
+  </data>
+  <data name="EchoSent" xml:space="preserve">
+    <value>Echo Sent</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>Help</value>

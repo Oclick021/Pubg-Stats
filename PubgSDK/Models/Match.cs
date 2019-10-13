@@ -20,6 +20,7 @@ namespace PubgSDK.Models
         public bool IsCustomMatch { get; set; }
         public string SeasonState { get; set; }
 
+        
         public virtual IEnumerable<PlayerMatch> Players { get; set; }
         public Match()
         {
@@ -46,7 +47,7 @@ namespace PubgSDK.Models
             {
                 foreach (var participant in roster.Participants)
                 {
-                    if (mvp == null || mvp.Stats == null || participant.Stats.DamageDealt > mvp.Stats.DamageDealt)
+                    if (mvp == null || mvp.Stats == null || participant.Stats.GetXP() > mvp.Stats.GetXP())
                     {
                         mvp = participant;
                     }
@@ -54,6 +55,9 @@ namespace PubgSDK.Models
             }
             return mvp;
         }
+     
+
+
         public IEnumerable<Participant> GetMyTeam(string playerName)
         {
             foreach (var roster in Rosters)
@@ -91,6 +95,7 @@ namespace PubgSDK.Models
         {
             var stats = GetParticipantsMatchStats(playerName);
             var values = new StringBuilder();
+            values.AppendLine(stats.GetXP() +" XP");
             values.AppendLine(stats.DamageDealt.ToString("F1"));
             values.AppendLine(stats.Kills.ToString());
             values.AppendLine(stats.HeadshotKills.ToString());
@@ -107,6 +112,7 @@ namespace PubgSDK.Models
         public static string GetTitles()
         {
             var values = new StringBuilder();
+            values.AppendLine("Points");
             values.AppendLine("DamageDealt");
             values.AppendLine("Kills");
             values.AppendLine("HeadshotKills");
@@ -116,7 +122,6 @@ namespace PubgSDK.Models
             values.AppendLine("DBNOs");
             values.AppendLine("Revives");
             values.AppendLine("TimeSurvived");
-            values.AppendLine("WinPlace");
             return values.ToString();
         }
 

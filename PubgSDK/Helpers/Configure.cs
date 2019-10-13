@@ -10,11 +10,12 @@ namespace PubgSDK.Helpers
 {
     public class Configure
     {
+
         public Configure()
         {
             PubgApiConfiguration.Configure(opt =>
             {
-                opt.ApiKey = Credentials.PubgToken;
+                opt.ApiKey = Config.PubgToken;
             });
 
             using (var con = new PubgDB())

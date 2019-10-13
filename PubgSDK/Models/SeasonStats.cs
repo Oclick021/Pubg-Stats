@@ -52,7 +52,7 @@ namespace PubgSDK.Models
         public static void GetCurrentSeason()
         {
             var seasons = new PubgSeasonService()
-                   .GetSeasonsPC(PubgPlatform.Steam, Credentials.PubgToken);
+                   .GetSeasonsPC(PubgPlatform.Steam, Config.PubgToken);
 
             currentSeasonID = seasons
                 .Where(s => s.IsCurrentSeason == true)

@@ -43,13 +43,13 @@ namespace PubgSDK.Helpers
                 var playerService = new PubgPlayerService();
                 if (id != null)
                 {
-                    player = await playerService.GetPlayerAsync(PubgPlatform.Steam, id, Credentials.PubgToken);
+                    player = await playerService.GetPlayerAsync(PubgPlatform.Steam, id, Config.PubgToken);
                 }
                 else if (name != null)
                 {
                     var result = await playerService.GetPlayersAsync(PubgPlatform.Steam, new GetPubgPlayersRequest
                     {
-                        ApiKey = Credentials.PubgToken,
+                        ApiKey = Config.PubgToken,
                         PlayerNames = new string[] { name }
                     });
                     player = result.FirstOrDefault();
@@ -72,6 +72,7 @@ namespace PubgSDK.Helpers
                 var matchInDb = await con.Matches.FirstOrDefaultAsync(m => m.Id == match.Id);
                 if (matchInDb == null)
                 {
+
                     con.Matches.Add(match);
                     await con.SaveChangesAsync();
                 }
@@ -81,7 +82,7 @@ namespace PubgSDK.Helpers
         public static async Task<Match> GetPubgMatch(string matchID)
         {
             var service = new PubgMatchService();
-            var match = await service.GetMatchAsync(PubgPlatform.Steam, matchID, Credentials.PubgToken);
+            var match = await service.GetMatchAsync(PubgPlatform.Steam, matchID, Config.PubgToken);
             string serialized = JsonConvert.SerializeObject(match);
             var m = JsonConvert.DeserializeObject<Match>(serialized);
             return m;
