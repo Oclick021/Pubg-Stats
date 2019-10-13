@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29209.62
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PubgAPI", "FoodleAPI\PubgAPI.csproj", "{0DD8FED6-01BA-4829-970B-C40F6F180645}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PubgAPI", "PubgApi\PubgAPI.csproj", "{0DD8FED6-01BA-4829-970B-C40F6F180645}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PubgStatsBot", "PubgStatsBot\PubgStatsBot.csproj", "{98DE7E54-58E4-4F5D-A648-6AA4594FE6FD}"
 EndProject
