@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PubgAPI.Helpers;
+using PubgAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -32,21 +33,20 @@ namespace PubgAPI.Services
 
         public User Authenticate(string username, string password)
         {
-            //using (var context = new FoodleContext())
-            //{
-            //    var user = context.Users.Where(x => x.Username == username && x.Password == Encrypt(password)).FirstOrDefault();
-            //    // return null if user not found
-            //    if (user == null)
-            //        return null;
+            using (var context = new ApiDbContext())
+            {
+                var user = context.Users.Where(x => x.Username == username && x.Password == Encrypt(password)).FirstOrDefault();
+                // return null if user not found
+                if (user == null)
+                    return null;
 
-            //    SignToken(user);
+                SignToken(user);
 
-            //    context.Update(user);
-            //    // remove password before returning
-            //    user.Password = null;
-            //    return user;
-            //}
-            return null; //just to catch the error
+                context.Update(user);
+                // remove password before returning
+                user.Password = null;
+                return user;
+            }
 
         }
 
@@ -60,7 +60,8 @@ namespace PubgAPI.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.Id.ToString())
+                    new Claim(ClaimTypes.Name, user.Id.ToString()),
+                    new Claim(ClaimTypes.Role, user.Role)
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -70,12 +71,11 @@ namespace PubgAPI.Services
         }
         public static async Task<User> GetByID(int id)
         {
-            //using (var context = new FoodleContext())
-            //{
-            //    return await context.Users.FindAsync(id);
-            //}
+            using (var context = new ApiDbContext())
+            {
+                return await context.Users.FindAsync(id);
+            }
 
-            return null; //just to catch the error
         }
         public static string Encrypt(string pass)
         {
